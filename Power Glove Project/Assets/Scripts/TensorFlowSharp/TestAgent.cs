@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TensorFlow;
+using System.Diagnostics;
 
 public class TestAgent : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class TestAgent : MonoBehaviour
 
     // Drag graph model from Resources onto script in the Editor
     public TextAsset graphModel;
+
+    // Test by setting input vector directly
+    public List<float> inputs = new List<float>() { 0f, 0f, 0f, 0f };
 
     // Persistent TensorFlow graph
     private TFGraph graph;
@@ -18,7 +22,7 @@ public class TestAgent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        TestVariable();
+        LoadTensorFlowGraph();
     }
 
     // Update is called once per frame
@@ -88,22 +92,57 @@ public class TestAgent : MonoBehaviour
         graph.Import(graphModel.bytes);
         session = new TFSession(graph);
 
+        UnityEngine.Debug.Log(graph["sequential/output1/Softmax"].ToString());
+        UnityEngine.Debug.Log(graph["sequential/dense1/Relu"].ToString());
+        UnityEngine.Debug.Log(graph["x"].ToString());
+
+        //UnityEngine.Debug.Log(graph["input1_input"].ToString());
+        //UnityEngine.Debug.Log(graph["dense1"].ToString());
+        //UnityEngine.Debug.Log(graph["output1"].ToString());
+        //UnityEngine.Debug.Log(graph["output1/Softmax"].ToString());
+
         // Get input tensors
         runner = session.GetRunner();
         //TODO how to handle placeholders?
-        var placeholder_value1 = graph.Placeholder(TFDataType.Int16);
-        var placeholder_value2 = graph.Placeholder(TFDataType.Int16);
+        var placeholder_value1 = graph.Placeholder(TFDataType.Int32);
+        var placeholder_value2 = graph.Placeholder(TFDataType.Int32);
+        var placeholder_value3 = graph.Placeholder(TFDataType.Int32);
+        var placeholder_value4 = graph.Placeholder(TFDataType.Int32);
 
         // runner.AddInput(graph["input_placeholder_name"][0], new float[] { placeholder_value1, placeholder_value2 });
-        //runner.AddInput(graph["sensor1_input"][0], new float[] { placeholder_value1, placeholder_value2 });
+        runner.AddInput(graph["x"][0], new float[,] { { inputs[0], inputs[1], inputs[2], inputs[3] } });
         //TODO need 23 placeholders for input vector
 
         // Retrieve output
-        runner.Fetch(graph["output_placeholder_name"][0]);
+        runner.Fetch(graph["sequential/output1/Softmax"][0]);
         //TODO example is for 2D tensor of floats
-        float recurrent_tensor = (float)runner.Run()[0].GetValue();
+        var output = runner.Run();
+        var vecResults = output[0].GetValue();
+        float[,] results = (float[,])vecResults;
+
+        for (int i = 0; i < 6; i++)
+        {
+            UnityEngine.Debug.Log("Output " + i + " is " + results[0, i].ToString());
+        }
+
+        UnityEngine.Debug.Log("The response for input " + 
+            inputs[0].ToString() + inputs[1].ToString() + inputs[2].ToString() + inputs[3].ToString() + 
+            " is " + getMaxIndex(results));
+
     }
 
+    private int getMaxIndex(float[,] results)
+    {
+        int maxIndex = 0;
+        for(int i = 0; i < results.Length - 1; i++)
+        {
+            if(results[0,maxIndex] < results[0,i+1])
+            {
+                maxIndex = i + 1;
+            }
+        }
+        return maxIndex;
+    }
 
     #endregion
 }
