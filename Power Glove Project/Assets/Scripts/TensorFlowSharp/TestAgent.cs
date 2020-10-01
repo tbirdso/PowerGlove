@@ -11,6 +11,9 @@ public class TestAgent : MonoBehaviour
     // Drag graph model from Resources onto script in the Editor
     public TextAsset graphModel;
 
+    // Test by setting input vector directly
+    public List<float> inputs = new List<float>() { 0f, 0f, 0f, 0f };
+
     // Persistent TensorFlow graph
     private TFGraph graph;
     private TFSession session;
@@ -107,7 +110,7 @@ public class TestAgent : MonoBehaviour
         var placeholder_value4 = graph.Placeholder(TFDataType.Int32);
 
         // runner.AddInput(graph["input_placeholder_name"][0], new float[] { placeholder_value1, placeholder_value2 });
-        runner.AddInput(graph["x"][0], new float[,] { { 0f, 0f, 1f, 1f } });
+        runner.AddInput(graph["x"][0], new float[,] { { inputs[0], inputs[1], inputs[2], inputs[3] } });
         //TODO need 23 placeholders for input vector
 
         // Retrieve output
@@ -122,7 +125,9 @@ public class TestAgent : MonoBehaviour
             UnityEngine.Debug.Log("Output " + i + " is " + results[0, i].ToString());
         }
 
-        UnityEngine.Debug.Log("The response for input [0,0,1,1] is " + getMaxIndex(results));
+        UnityEngine.Debug.Log("The response for input " + 
+            inputs[0].ToString() + inputs[1].ToString() + inputs[2].ToString() + inputs[3].ToString() + 
+            " is " + getMaxIndex(results));
 
     }
 

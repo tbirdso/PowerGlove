@@ -177,7 +177,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb56b8442d56b046acbe0ae883a8d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphModel: {fileID: 4900000, guid: d6b604db86f58ee4cbce31b1885b069e, type: 3}
+  graphModel: {fileID: 4900000, guid: 5757b2517b712d24f873c2d1d63f96cc, type: 3}
+  inputs:
+  - 1
+  - 0
+  - 0
+  - 1
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,7 +388,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   filename: Data/data.csv
-  featureNames: []
+  featureNames:
+  - Feature1
+  - Feature2
+  - Feature3
+  - Feature4
 --- !u!4 &1144428255
 Transform:
   m_ObjectHideFlags: 0

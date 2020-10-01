@@ -22,6 +22,8 @@ public class InputWriter : MonoBehaviour
 
     // Rover for inserting records
     private int index;
+    // Label header for CSV file
+    private string LABEL_HEADER = "Label";
     #endregion
 
 
@@ -99,7 +101,7 @@ public class InputWriter : MonoBehaviour
             {
                 builder.Append(feature_name + delim);
             }
-            builder.Remove(builder.Length - 1, 1);
+            builder.Append(LABEL_HEADER);
             outStream.WriteLine(builder.ToString());
 
             // Write data

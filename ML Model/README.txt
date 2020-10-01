@@ -1,0 +1,5 @@
+In this folder:
+- tensorflow_model.py is the script to train a DNN in Keras on Glove data (or any vector input)
+- model###### folders contain exported DNN graphs that we can use with Unity and TensorFlowSharp for efficient inference procedures at simulation runtime
+- logs folders contain training statistics displayable with TensorBoard. These are gitignored to avoid overcrowding the Git repo. If we decide in the future that we want to share a subset of training data among the team then we can move selected data to an additional folder to include in the repo.
+- the sklearn_attempts folder contains first-attempt files where I created an SVM training model in sklearn_model.py with the sklearn package. The model can be loaded into Python environments such as in model_inference.py but I could not find a pipeline to convert it to a format that TensorFlowSharp could interpret. I'm leaving these files for now in case something breaks with Unity support in the future and we need to fall back to a multithreaded approach, but that would be a lot more work than the establish pipeline with Keras and TensorFlowSharp.
