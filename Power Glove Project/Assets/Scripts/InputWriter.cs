@@ -17,6 +17,8 @@ public class InputWriter : MonoBehaviour
     public int[,] data;
     // Destination data file
     public string filename = "data.csv";
+    // Feature names
+    public List<string> featureNames;
 
     // Rover for inserting records
     private int index;
@@ -92,6 +94,15 @@ public class InputWriter : MonoBehaviour
 
         using(outStream = System.IO.File.CreateText(filename))
         {
+            // Write column headers
+            foreach(string feature_name in featureNames)
+            {
+                builder.Append(feature_name + delim);
+            }
+            builder.Remove(builder.Length - 1, 1);
+            outStream.WriteLine(builder.ToString());
+
+            // Write data
             for(i = 0; i < index; i++)
             {
                 builder.Clear();
