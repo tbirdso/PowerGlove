@@ -21,6 +21,9 @@ public class TestTFSharpAgent : MonoBehaviour
     // Toggle testing and output on/off
     public bool doInference = false;
 
+    public bool indexFixed = false;
+    public int recordIndex = 1;
+
     // Data read in from CSV when the program starts
     private List<string[]> data;
 
@@ -40,7 +43,11 @@ public class TestTFSharpAgent : MonoBehaviour
         {
             List<float> inputVector = new List<float>();
             // randomly select a data point to test
-            int recordIndex = (int)(UnityEngine.Random.Range(0f, data.Count - 1) + 1);
+            if (!indexFixed)
+            {
+                recordIndex = (int)(UnityEngine.Random.Range(0f, data.Count - 1) + 1);
+            }
+
             // label is the last column
             int expectedLabel = int.Parse(data[recordIndex][data[recordIndex].Length - 1]);
             for(int dataIndex = 0; dataIndex < data[recordIndex].Length - 1; dataIndex++)

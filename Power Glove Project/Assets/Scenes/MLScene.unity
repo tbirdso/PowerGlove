@@ -154,6 +154,7 @@ MonoBehaviour:
   dataFile: Data/Leap/compiled_leap_noext.csv
   agent: {fileID: 270014183}
   doInference: 0
+  recordIndex: 1
 --- !u!4 &270014182
 Transform:
   m_ObjectHideFlags: 0
@@ -182,7 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NUM_FEATURES: 40
   NUM_LABELS: 11
-  graphModel: {fileID: 4900000, guid: a898c0585b6ae1e449092747cac131ee, type: 3}
+  graphModel: {fileID: 4900000, guid: 6423f6901d6a8144891f5fb62d692b93, type: 3}
   isDebug: 0
 --- !u!1 &705507993
 GameObject:
