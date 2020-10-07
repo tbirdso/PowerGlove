@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using TensorFlow;
 using System.Diagnostics;
+using System;
 
 public class TestAgent : MonoBehaviour
 {
-    const int NUM_INPUTS = 23;
+    const int NUM_LABELS = 11;
 
     // Drag graph model from Resources onto script in the Editor
     public TextAsset graphModel;
 
     // Test by setting input vector directly
-    public List<float> inputs = new List<float>() { 0f, 0f, 0f, 0f };
+    public List<float> inputs = new List<float>() { 0f};
 
     // Persistent TensorFlow graph
     private TFGraph graph;
@@ -110,7 +111,8 @@ public class TestAgent : MonoBehaviour
         var placeholder_value4 = graph.Placeholder(TFDataType.Int32);
 
         // runner.AddInput(graph["input_placeholder_name"][0], new float[] { placeholder_value1, placeholder_value2 });
-        runner.AddInput(graph["x"][0], new float[,] { { inputs[0], inputs[1], inputs[2], inputs[3] } });
+        float[,] rowInput = ListTo2DArray(inputs);
+        runner.AddInput(graph["x"][0], rowInput);
         //TODO need 23 placeholders for input vector
 
         // Retrieve output
@@ -120,17 +122,28 @@ public class TestAgent : MonoBehaviour
         var vecResults = output[0].GetValue();
         float[,] results = (float[,])vecResults;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < NUM_LABELS; i++)
         {
             UnityEngine.Debug.Log("Output " + i + " is " + results[0, i].ToString());
         }
 
-        UnityEngine.Debug.Log("The response for input " + 
-            inputs[0].ToString() + inputs[1].ToString() + inputs[2].ToString() + inputs[3].ToString() + 
-            " is " + getMaxIndex(results));
+        UnityEngine.Debug.Log("The response for the input vector is " + getMaxIndex(results));
 
     }
 
+    // Private method to convert input array to format the TensorFlow graph can accept
+    private T[,] ListTo2DArray<T>(List<T> listToConvert)
+    {
+        T[,] arr = new T[1, listToConvert.Count];
+        
+        for(int index = 0; index < listToConvert.Count; index++) {
+            arr[0,index] = listToConvert[index];
+        }
+
+        return arr;
+    }
+
+    // Private method to get the largest index from stochastic TensorFlow graph output
     private int getMaxIndex(float[,] results)
     {
         int maxIndex = 0;
