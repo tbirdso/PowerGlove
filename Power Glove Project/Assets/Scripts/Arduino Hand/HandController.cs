@@ -48,23 +48,42 @@ public class HandController : MonoBehaviour
     {
         /*
          * ARDUINO CODE USED TO SEND DATA
+         
+            int IP;
+            int MCP;
+            int analogIP = A0;
+            int analogMCP = A3;
+            int threshold = 3;
+
             void setup() {
               // put your setup code here, to run once:
-              pinMode(A0, INPUT);
-              pinMode(A1, INPUT);
+              pinMode(analogIP, INPUT);
+              pinMode(analogMCP, INPUT);
               Serial.begin(9600);
             }
 
             void loop() {
-              // put your main code here, to run repeatedly:
-              Serial.print("1,");
-              Serial.print(analogRead(A0));
-              Serial.println();
+              //Send IP Joint when change is greater than threshold
+              int temp = analogRead(analogIP);
+              if(abs(IP - temp) > threshold){
+                IP = temp;
+                Serial.print("1,");
+                Serial.print(IP);
+                Serial.println();
+              }
 
-              Serial.print("2,");
-              Serial.print(analogRead(A1));
-              Serial.println();
-            }  
+              //Send MCP Joint when change is greater than threshold
+              temp = analogRead(analogMCP);
+              if(abs(MCP - temp) > threshold){
+                MCP = temp;
+                Serial.print("2,");
+                Serial.print(MCP);
+                Serial.println();
+              }
+  
+              delay(10);
+            }
+
         */
 
         //Message is formatted as x,Y where x is the joint and Y is the unscaled value for the joint
