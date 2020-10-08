@@ -18,7 +18,7 @@ useExtended = False
 # Structure: folders 1 - 10, file for each finger
 FOLDERS = [str(i) for i in range(LOW_LABEL, HIGH_LABEL + 1)]
 CSV_NAME = '10_6_{0}.csv'
-FINGERS = {'thumb','index', 'middle', 'ring', 'pinky'}
+FINGERS = ['thumb','index', 'middle', 'ring', 'pinky']
 
 # Compiled dataframe
 compiled_df = pd.DataFrame()
@@ -27,6 +27,7 @@ compiled_df = pd.DataFrame()
 for dir in FOLDERS:
     label_df = pd.DataFrame()
     for finger in FINGERS:
+
         right_df = pd.read_csv(DATAPATH + '\\' + dir + '\\' + CSV_NAME.format(finger))
         print('Imported ' + str(len(right_df)) + ' records from ' + dir + finger)
         
