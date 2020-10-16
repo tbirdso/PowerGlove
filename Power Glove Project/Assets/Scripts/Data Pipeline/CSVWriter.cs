@@ -6,11 +6,10 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 
-public class InputWriter : MonoBehaviour
+// Class to handle writing data out to CSV file
+public class CSVWriter : MonoBehaviour
 {
     #region Members
-    public const int MAX_RECORDS = 1000;
-    public const int NUM_FEATURES = 4;
     public const char delim = ',';
 
     // Buffer for records with appended labels
@@ -31,7 +30,7 @@ public class InputWriter : MonoBehaviour
     void Start()
     {
         index = 0;
-        data = new int[MAX_RECORDS, NUM_FEATURES + 1];
+        data = new int[Defs.NUM_TRAINING_RECORDS, Defs.NUM_TRAINING_COLS];
     }
 
     // Update is called once per frame
@@ -39,16 +38,54 @@ public class InputWriter : MonoBehaviour
     {
         TestParseLabel();
 
-        if (index > 0 && index < MAX_RECORDS)
+        if (index > 0 && index < Defs.NUM_TRAINING_RECORDS)
         {
             UnityEngine.Debug.Log("index: " + index);
-            UnityEngine.Debug.Log("Last label: " + data[index-1, NUM_FEATURES]);
+            UnityEngine.Debug.Log("Last label: " + data[index-1, Defs.NUM_FEATURES]);
         }
         // If we overflow the buffer then write out data and clear the buffer
-        if(index >= MAX_RECORDS)
+        if(index >= Defs.NUM_TRAINING_RECORDS)
         {
             WriteData();
             index = 0;
+        }
+    }
+
+    void WriteData()
+    {
+        WriteData(data);
+    }
+
+    // Write out data to a CSV file
+    public void WriteData<T>(T[,] data)
+    {
+        StreamWriter outStream;
+        StringBuilder builder = new StringBuilder();
+        int i, feature_index;
+
+        using (outStream = System.IO.File.CreateText(filename))
+        {
+            // Write column headers
+            foreach (string feature_name in featureNames)
+            {
+                builder.Append(feature_name + delim);
+            }
+            builder.Append(LABEL_HEADER);
+            outStream.WriteLine(builder.ToString());
+
+            // Write data
+            for (i = 0; i < data.GetLength(0); i++)
+            {
+                builder.Clear();
+                for (feature_index = 0; feature_index < Defs.NUM_TRAINING_COLS; feature_index++)
+                {
+                    builder.Append(data[i, feature_index].ToString() + delim);
+                }
+                builder.Remove(builder.Length - 1, 1);
+
+                UnityEngine.Debug.Log("Writing this line: " + builder.ToString());
+                outStream.WriteLine(builder.ToString());
+            }
         }
     }
 
@@ -64,7 +101,7 @@ public class InputWriter : MonoBehaviour
             data[index, 1] = 0;
             data[index, 2] = 0;
             data[index, 3] = 1;
-            data[index, NUM_FEATURES] = 1;
+            data[index, Defs.NUM_FEATURES] = 1;
             index++;
         }
         else if (Input.GetKey(KeyCode.Alpha2))
@@ -73,7 +110,7 @@ public class InputWriter : MonoBehaviour
             data[index, 1] = 0;
             data[index, 2] = 1;
             data[index, 3] = 0;
-            data[index, NUM_FEATURES] = 2;
+            data[index, Defs.NUM_FEATURES] = 2;
             index++;
         }
         else if (Input.GetKey(KeyCode.Alpha3))
@@ -82,42 +119,11 @@ public class InputWriter : MonoBehaviour
             data[index, 1] = 0;
             data[index, 2] = 1;
             data[index, 3] = 1;
-            data[index, NUM_FEATURES] = 3;
+            data[index, Defs.NUM_FEATURES] = 3;
             index++;
         }
     }
 
-    // Write out data to a CSV file
-    void WriteData()
-    {
-        StreamWriter outStream;
-        StringBuilder builder = new StringBuilder();
-        int i, feature_index;
 
-        using(outStream = System.IO.File.CreateText(filename))
-        {
-            // Write column headers
-            foreach(string feature_name in featureNames)
-            {
-                builder.Append(feature_name + delim);
-            }
-            builder.Append(LABEL_HEADER);
-            outStream.WriteLine(builder.ToString());
-
-            // Write data
-            for(i = 0; i < index; i++)
-            {
-                builder.Clear();
-                for(feature_index = 0; feature_index < NUM_FEATURES + 1; feature_index++)
-                {
-                    builder.Append(data[i, feature_index].ToString() + delim);
-                }
-                builder.Remove(builder.Length - 1, 1);
-
-                UnityEngine.Debug.Log("Writing this line: " + builder.ToString());
-                outStream.WriteLine(builder.ToString());
-            }
-        }
-    }
     #endregion
 }
