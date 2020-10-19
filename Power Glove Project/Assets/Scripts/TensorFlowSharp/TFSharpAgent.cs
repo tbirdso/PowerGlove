@@ -25,6 +25,10 @@ public class TFSharpAgent : MonoBehaviour
     // Drag graph model from Resources onto script in the Editor
     public TextAsset graphModel;
 
+    // Reference for other object to determine whether agent can run inference
+    public bool CanInfer => graphModel != null;
+
+    // Control whether agent does printouts for testing
     public bool isDebug;
 
     // Persistent TensorFlow graph
