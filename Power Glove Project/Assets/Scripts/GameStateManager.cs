@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-<<<<<<< HEAD
 // Class to manage scene state behavior among three states:
 // - Train: Scene is collecting and exporting labelled data
 //              so that an ML model can be trained later
@@ -19,16 +18,11 @@ public class GameStateManager : MonoBehaviour
     [Tooltip("Time interval for calibration in seconds.")]
     public float calibrateInterval = 5.0f;
 
-=======
-public class GameStateManager : MonoBehaviour
-{
->>>>>>> master
     [Tooltip("Check if data is being collected for training.")]
     public bool isTraining = false;
 
     [Tooltip("True if data is currently calibrating.")]
     public bool isCalibrating = false;
-<<<<<<< HEAD
 
     // Total time spent calibrating so far
     private float calibTime = 0;
@@ -59,6 +53,4 @@ public class GameStateManager : MonoBehaviour
         }
     }
     #endregion
-=======
->>>>>>> master
 }
