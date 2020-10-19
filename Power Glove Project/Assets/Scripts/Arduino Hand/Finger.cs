@@ -10,16 +10,32 @@ public class Finger
     public const int MCP = 2;
     public const int boneChainLength = 3;
 
+    private float ipAngle;
+    private float mcpAngle;
+    private float spreadAngle;
+    private readonly int fingerType;
     private readonly Transform[] joints;
+    private readonly Hand hand;
 
     public Finger()
     {
+        this.ipAngle = 0;
+        this.mcpAngle = 0;
+        this.spreadAngle = 0;
+        this.fingerType = 0;
         this.joints = null;
+        this.hand = null;
     }
 
-    public Finger(Transform fingerTip)
+    public Finger(Transform fingerTip, Hand handRef, int fingerNum)
     {
+        this.ipAngle = 0;
+        this.mcpAngle = 0;
+        this.spreadAngle = 0;
+        this.fingerType = fingerNum;
         this.joints = null;
+        this.hand = handRef;
+
         if (fingerTip != null) { 
 
             //Initialize joint transform references
@@ -31,6 +47,22 @@ public class Finger
                 this.joints[i] = currentJoint.transform;
                 currentJoint = currentJoint.parent;
             }
+
+            //Rotate pinky, ring, and index finger inline with the palm so they bend straight (for aesthetics)
+            float fingerRotation = 0f;
+            if (this.fingerType == Hand.INDEX)
+            {
+                fingerRotation = -10f;
+            }
+            else if (this.fingerType == Hand.PINKY || this.fingerType == Hand.RING)
+            {
+                fingerRotation = 5f;
+            }
+
+            //Initialize resting position
+            this.joints[DIP].transform.localEulerAngles = new Vector3(0, 0, -10);
+            this.joints[PIP].transform.localEulerAngles = new Vector3(0, 0, -10);
+            this.joints[MCP].transform.localEulerAngles = new Vector3(fingerRotation, 0, -5);
         }
     }
 
@@ -40,15 +72,17 @@ public class Finger
         {
             if (jointNum == MCP)
             {
-                //Preserve the finger spread when bending joints
-                float yAngle = this.joints[MCP].transform.localEulerAngles.y;
-                this.joints[MCP].transform.localEulerAngles = new Vector3(0.0f, yAngle, -angle);
+                //Rotate MCP around z-axis referenced from the wrist
+                //Using the z-axis in its local space has unintended effects due to finger rotation and spread
+                this.joints[MCP].transform.Rotate(this.hand.Wrist.forward, this.mcpAngle - angle, Space.World);
+                this.mcpAngle = angle;
             }
             else
             {
-                //Bend both IP joints
-                this.joints[DIP].transform.localEulerAngles = new Vector3(0.0f, 0.0f, -angle);
-                this.joints[PIP].transform.localEulerAngles = new Vector3(0.0f, 0.0f, -angle);
+                //Rotate both IP joints around their local space z-axis
+                this.joints[DIP].transform.Rotate(Vector3.forward, this.ipAngle - angle, Space.Self);
+                this.joints[PIP].transform.Rotate(Vector3.forward, this.ipAngle - angle, Space.Self);
+                this.ipAngle = angle;
             }
         }
     }
@@ -57,27 +91,20 @@ public class Finger
     {
         if(this.joints != null)
         {
-            //Preserve joint bend when spreading
-            float zAngle = this.joints[MCP].transform.localEulerAngles.z;
-            this.joints[MCP].transform.localEulerAngles = new Vector3(0.0f, angle, zAngle);
+            //Rotate MCP joint around local space y-axis
+            this.joints[MCP].transform.Rotate(Vector3.up, this.spreadAngle - angle, Space.Self);
+            this.spreadAngle = angle;
         }
     }
 
     public void SpreadFinger(Finger otherFinger)
     {
         //Place holder for creating anlges between two fingers
+        //NEED TO DO
     }
 
     public override string ToString()
     {
-        if (this.joints != null)
-        {
-            float dipAngle = this.joints[DIP].transform.localEulerAngles.z;
-            float pipAngle = this.joints[PIP].transform.localEulerAngles.z;
-            float mcpAngle = this.joints[MCP].transform.localEulerAngles.z;
-            float spreadAngle = this.joints[MCP].transform.localEulerAngles.y;
-            return "DIP:" + dipAngle + " PIP:" + pipAngle + " MCP:" + mcpAngle + " Spread:" + spreadAngle + "\n";
-        }
-        return "No finger\n";
+        return "DIP:" + this.ipAngle + " PIP:" + this.ipAngle + " MCP:" + this.mcpAngle + " Spread:" + this.spreadAngle + "\n";
     }
 }

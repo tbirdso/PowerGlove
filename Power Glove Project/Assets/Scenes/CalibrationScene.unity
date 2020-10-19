@@ -248,8 +248,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3614f9b0290aac244a3b8ee1a2c6f6fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   agent: {fileID: 2134650883}
   calibrateInterval: 5
+=======
+>>>>>>> master
   isTraining: 0
   isCalibrating: 1
 --- !u!4 &214786325
