@@ -13,6 +13,9 @@ public class DataBufferInt : DataBuffer<int> { }
 public class DataBuffer<T> : MonoBehaviour
 {
     #region Members
+    [Tooltip("Determines whether the scene is in training/calibration/inference mode")]
+    public GameStateManager manager;
+
     [Tooltip("Most recent complete serial data point")]
     public T[] record = new T[Defs.NUM_FEATURES];
     [Tooltip("Most recent complete labelled serial data set")]
@@ -81,6 +84,8 @@ public class DataBuffer<T> : MonoBehaviour
         if(isSetBufferFull())
         {
             labelledSet = labelSetBuf;
+
+            labelSetIndex = 0;
             labelSetBuf = new T[Defs.NUM_TRAINING_RECORDS, Defs.NUM_TRAINING_COLS];
 
             if (LabelledSetReady != null)
@@ -96,7 +101,8 @@ public class DataBuffer<T> : MonoBehaviour
     bool isRecBufferFull()
     {
         // TODO handle label column
-        return (recordBuf.Count == Defs.NUM_FEATURES);
+        return (manager.IsTraining) ? 
+            (recordBuf.Count == Defs.NUM_TRAINING_COLS) : (recordBuf.Count == Defs.NUM_FEATURES);
     }
 
     // Determine whether all rows in the set buffer are filled

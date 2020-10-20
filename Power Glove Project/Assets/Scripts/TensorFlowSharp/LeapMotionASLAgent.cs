@@ -43,14 +43,14 @@ public class LeapMotionASLAgent : TFSharpAgent
             var script = handModel.GetComponent<RigidHand>();
             leapHand = script.GetLeapHand();
             //leapHand = trackedHand.GetComponentInChildren<RigidHand>().GetLeapHand();
-            int label = RunInference();
+            int? label = RunInference();
             UnityEngine.Debug.Log("Label is " + label.ToString());
         }
     }
 
     #region Public Methods
 
-    public int RunInference()
+    public int? RunInference()
     {
         List<float> inputs = new List<float>();
 

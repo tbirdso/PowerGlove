@@ -18,11 +18,13 @@ public class GameStateManager : MonoBehaviour
     [Tooltip("Time interval for calibration in seconds.")]
     public float calibrateInterval = 5.0f;
 
-    [Tooltip("Check if data is being collected for training.")]
-    public bool isTraining = false;
+    //Check if data is being collected for training.
+    public bool IsTraining { get { return isTraining; } }
+    private bool isTraining = false;
 
-    [Tooltip("True if data is currently calibrating.")]
-    public bool isCalibrating = false;
+    // True if data is currently calibrating.
+    public bool IsCalibrating { get { return isCalibrating; } }
+    private bool isCalibrating = false;
 
     // Total time spent calibrating so far
     private float calibTime = 0;
@@ -36,7 +38,7 @@ public class GameStateManager : MonoBehaviour
         // If the agent is set up then calibrate before inference
         isCalibrating = agent.CanInfer;
 
-        if (isTraining) Defs.Debug("Training...");
+        if (isTraining) Defs.Debug("Collecting training data...");
         if (isCalibrating) Defs.Debug("Calibrating...");
     }
 

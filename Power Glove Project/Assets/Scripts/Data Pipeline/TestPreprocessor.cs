@@ -31,7 +31,7 @@ public class TestPreprocessor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (manager.isTraining)
+        if (manager.IsTraining)
         {
             if (recIndex > Defs.NUM_TRAINING_RECORDS) recIndex = 0;
 
@@ -69,10 +69,13 @@ public class TestPreprocessor : MonoBehaviour
 
             // Run inference if done with calibration,
             // otherwise discard results
-            if(!manager.isCalibrating)
+            if(!manager.IsCalibrating)
             {
-                int label = agent.RunInference(lastScaledRow.ToList());
-                Defs.Debug("Got label " + Defs.LABELS[label]);
+                int? label = agent.RunInference(lastScaledRow.ToList());
+                if (label.HasValue)
+                    Defs.Debug("Got label " + Defs.LABELS[label.Value]);
+                else
+                    Defs.Debug("No label returned from inference.");
             }
         }
     }
