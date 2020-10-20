@@ -14,7 +14,7 @@ public static class Defs
     // Expected number of columns in training data
     public const int NUM_TRAINING_COLS = NUM_FEATURES + NUM_LABELS;
     // Expected number of rows in training data
-    public const int NUM_TRAINING_RECORDS = 1000;
+    public const int NUM_TRAINING_RECORDS = 10000;
 
     // Domain for normalized data to train NN
     public const float TRAINING_MIN = -1;

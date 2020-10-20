@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 4155692}
   - component: {fileID: 4155691}
   - component: {fileID: 4155690}
+  - component: {fileID: 4155694}
   - component: {fileID: 4155693}
   m_Layer: 0
   m_Name: DataProcessor
@@ -212,13 +213,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 4155689}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 252199741b31378449bc963d520ad601, type: 3}
+  m_Script: {fileID: 11500000, guid: 2276c0b04f275ac4a9b49602845aaca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 214786324}
+  buffer: {fileID: 4155694}
   preprocessor: {fileID: 4155690}
   writer: {fileID: 4155691}
   agent: {fileID: 2134650883}
+--- !u!114 &4155694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4155689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b91eea9874c23764491cb1e6bb43684c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 214786324}
+  record: 
+  isDebug: 0
+  RecordReady:
+    m_PersistentCalls:
+      m_Calls: []
+  LabelledSetReady:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &214786323
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,8 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3614f9b0290aac244a3b8ee1a2c6f6fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTraining: 0
-  isCalibrating: 1
+  agent: {fileID: 2134650883}
+  calibrateInterval: 5
 --- !u!4 &214786325
 Transform:
   m_ObjectHideFlags: 0
@@ -470,7 +493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NUM_FEATURES: 23
   NUM_LABELS: 11
-  graphModel: {fileID: 4900000, guid: a18cc2a4d7ad87c429ad34938b0db11c, type: 3}
+  graphModel: {fileID: 0}
   isDebug: 0
 --- !u!4 &2134650884
 Transform:
