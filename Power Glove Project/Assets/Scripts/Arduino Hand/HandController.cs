@@ -4,32 +4,36 @@ using UnityEngine;
 
 public class HandController : MonoBehaviour
 {
-    public const int INDEX = 0;
-    public const int MIDDLE = 1;
-    public const int RING = 2;
-    public const int PINKY = 3;
+    public Transform wrist;
+    public Hand hand;
 
-    public Transform[] fingerTips = new Transform[4];
-    public Finger[] fingers;
+    /* Moving Fingers
+     hand.fingers[FINGER OPTION].BendJoint(JOINT OPTION, ANGLE);
+     hand.fingers[FINGER OPTION].SpreadFinger(ANGLE);
 
+     FINGER 0PTION = Hand.INDEX, Hand.MIDDLE, Hand.RING, or Hand.PINKY
+     JOINT OPTION = Finger.IP or Finger.MCP
+     ANGLE = 0 to 90 degrees (you can put any angle, but outside of this range is pretty much physically impossible for a real hand)
+     */
+
+    /* Moving Thumb 
+    hand.thumb.BendJoint(JOINT OPTION, ANGLE);
+    hand.thumb.OpposeThumb(ANGLE);
+
+    JOINT OPTION = Thumb.IP or Thumb.MCP
+    ANGLE = 0 to 90 degrees
+     */
+
+    /* Moving Hand 
+    hand.RotateHand(AXIS, ANGLE);
+
+    AXIS = Vector3.right for x-axis in world coords or Vector3.forward for z-axis in world coords
+    ANGLE = Angle in degrees
+     */
 
     void Start() //Called before the first frame
     {
-        //finger
-        fingers = new Finger[4];
-        for(int i = 0; i < 4; i++)
-        {
-            fingers[i] = new Finger(fingerTips[i]);
-        }
-
-        /*
-        //Example of moving the index finger
-
-        fingers[INDEX].SpreadFinger(-40);
-        fingers[INDEX].BendJoint(Finger.IP, 60);
-        fingers[INDEX].BendJoint(Finger.MCP, 30);
-        */
-
+        hand = new Hand(wrist);
     }
 
     void OnConnectionEvent(bool success) //Called when attempting to connect to COM port
@@ -46,8 +50,7 @@ public class HandController : MonoBehaviour
 
     void OnMessageArrived(string msg) //Called when a line is received on the COM port
     {
-        /*
-         * ARDUINO CODE USED TO SEND DATA
+        /* ARDUINO CODE USED TO SEND DATA
          
             int IP;
             int MCP;
@@ -83,7 +86,6 @@ public class HandController : MonoBehaviour
   
               delay(10);
             }
-
         */
 
         //Message is formatted as x,Y where x is the joint and Y is the unscaled value for the joint
@@ -92,13 +94,21 @@ public class HandController : MonoBehaviour
 
         print(joint + "     " + val + "\n");
 
-        if(joint == 1)
+        if (joint == 1)
         {
-            fingers[INDEX].BendJoint(Finger.IP, ScaleNum(val));
+            hand.fingers[Hand.INDEX].BendJoint(Finger.IP, ScaleNum(val));
+            hand.fingers[Hand.MIDDLE].BendJoint(Finger.IP, ScaleNum(val));
+            hand.fingers[Hand.RING].BendJoint(Finger.IP, ScaleNum(val));
+            hand.fingers[Hand.PINKY].BendJoint(Finger.IP, ScaleNum(val));
+            hand.thumb.BendJoint(Thumb.IP, ScaleNum(val));
         }
         else if(joint == 2)
-        {
-            fingers[INDEX].BendJoint(Finger.MCP, ScaleNum(val));
+        { 
+            hand.fingers[Hand.INDEX].BendJoint(Finger.MCP, ScaleNum(val));
+            hand.fingers[Hand.MIDDLE].BendJoint(Finger.MCP, ScaleNum(val));
+            hand.fingers[Hand.RING].BendJoint(Finger.MCP, ScaleNum(val));
+            hand.fingers[Hand.PINKY].BendJoint(Finger.MCP, ScaleNum(val));
+            hand.thumb.BendJoint(Thumb.MCP, ScaleNum(val));
         }
     }
 

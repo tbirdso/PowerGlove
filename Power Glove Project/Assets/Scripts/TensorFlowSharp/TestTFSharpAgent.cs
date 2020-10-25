@@ -54,9 +54,12 @@ public class TestTFSharpAgent : MonoBehaviour
             {
                 inputVector.Add(float.Parse(data[recordIndex][dataIndex]));
             }
-            int inferredLabel = agent.RunInference(inputVector);
-            UnityEngine.Debug.Log("Row " + recordIndex.ToString() + 
-                " expected label " + expectedLabel.ToString() + " and got " + inferredLabel.ToString());
+            int? inferredLabel = agent.RunInference(inputVector);
+            if (inferredLabel.HasValue)
+                UnityEngine.Debug.Log("Row " + recordIndex.ToString() +
+                    " expected label " + expectedLabel.ToString() + " and got " + inferredLabel.ToString());
+            else
+                Defs.Debug("Could not get a label from inference.");
         }
     }
 

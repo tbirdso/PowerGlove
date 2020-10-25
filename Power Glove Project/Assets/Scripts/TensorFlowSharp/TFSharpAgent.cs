@@ -25,6 +25,10 @@ public class TFSharpAgent : MonoBehaviour
     // Drag graph model from Resources onto script in the Editor
     public TextAsset graphModel;
 
+    // Reference for other object to determine whether agent can run inference
+    public bool CanInfer => graphModel != null;
+
+    // Control whether agent does printouts for testing
     public bool isDebug;
 
     // Persistent TensorFlow graph
@@ -37,9 +41,9 @@ public class TFSharpAgent : MonoBehaviour
     #region Public Methods
 
     /* Returns a label given a vector of inputs */
-    public int RunInference(List<float> inputs)
+    public int? RunInference(List<float> inputs)
     {
-        LoadTensorFlowGraph();
+        if(!LoadTensorFlowGraph()) return null;
 
         int inferredLabel;
 
@@ -97,8 +101,15 @@ public class TFSharpAgent : MonoBehaviour
     }
 
     // Follow tutorial at https://github.com/llSourcell/Unity_ML_Agents/blob/master/docs/Using-TensorFlow-Sharp-in-Unity-(Experimental).md
-    private void LoadTensorFlowGraph()
+    private bool LoadTensorFlowGraph()
     {
+        if(graphModel == null)
+        {
+            Defs.Debug("No graph model was set. " +
+                "Will collect training data instead of running inference.");
+            return false;
+        }
+
         // Recreate the graph in Unity
         graph = new TFGraph();
         graph.Import(graphModel.bytes);
@@ -114,7 +125,7 @@ public class TFSharpAgent : MonoBehaviour
         //UnityEngine.Debug.Log(graph["output1"].ToString());
         //UnityEngine.Debug.Log(graph["output1/Softmax"].ToString());
 
-        return;
+        return true;
     }
 
     // Private method to convert input array to format the TensorFlow graph can accept
