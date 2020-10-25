@@ -43,20 +43,20 @@ public class LeapMotionASLAgent : TFSharpAgent
             var script = handModel.GetComponent<RigidHand>();
             leapHand = script.GetLeapHand();
             //leapHand = trackedHand.GetComponentInChildren<RigidHand>().GetLeapHand();
-            int? label = RunInference();
+            int? label = RunInference(leapHand);
             UnityEngine.Debug.Log("Label is " + label.ToString());
         }
     }
 
     #region Public Methods
 
-    public int? RunInference()
+    public int? RunInference(Leap.Hand hand)
     {
         List<float> inputs = new List<float>();
 
         // Fingers must be passed in the same default order
         // as used for training: thumb, index, middle, ring, pinky
-        foreach(Leap.Finger finger in leapHand.Fingers)
+        foreach(Leap.Finger finger in hand.Fingers)
         {
             inputs.Add(finger.TipPosition.x);
             inputs.Add(finger.TipPosition.y);

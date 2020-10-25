@@ -1,4 +1,5 @@
-﻿using Leap;
+﻿using Assets.Scripts.Leap_Motion;
+using Leap;
 using Leap.Unity;
 using System;
 using System.Collections.Generic;
@@ -13,31 +14,49 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
 {
     public class myHandScript : MonoBehaviour
     {
-        public Text m_MyText;
+        public Text currentText;
+        public Text nextText;
+        public Text scoreText;
         public LeapMotionASLAgent agent;
+        public GameObject RightHandModel;
         public bool UseML = true;
+        public UI_Manager UI;
 
         void Start()
         {
-            //Text sets your text to say this message
-            this.m_MyText = gameObject.GetComponent<Text>();
-            m_MyText.text = "Use Leap Motion Camera to display hand.";
+            this.currentText.text = "Use Leap Motion Camera to display hand.";
         }
 
         void Update()
         {
             if (UseML)
             {
-                this.m_MyText = gameObject.GetComponent<Text>();
-                m_MyText.text = agent.RunInference().ToString();
+                //Make sure hand is rendered
+                var handModel = GameObject.Find("RigidRoundHand_R");
+                if (handModel == null)
+                {
+                    this.currentText.text = "Use Leap Motion Camera to display hand.";
+                    return;
+                }
+                var script = handModel.GetComponent<RigidHand>();
+                var hand = script.GetLeapHand();
+
+                var value = agent.RunInference(hand).ToString();
+                UI.UpdateHandValue(value);
+
             }
             else
             {
                 //Press the space key to change the Text message
                 if (true || Input.GetKey(KeyCode.Space))
                 {
-                    this.m_MyText = gameObject.GetComponent<Text>();
+                    //var text = GameObject.Find("Current Hand Sign").GetComponent<Text>();
                     var handModel = GameObject.Find("RigidRoundHand_R");
+                    if (handModel == null)
+                    {
+                        this.currentText.text = "Use Leap Motion Camera to display hand.";
+                        return;
+                    }
                     var script = handModel.GetComponent<RigidHand>();
                     var hand = script.GetLeapHand();
                     var fingers = hand.Fingers;
@@ -49,7 +68,7 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
                        !fingers.Where(x => (x.Type.Equals(FingerType.TYPE_RING))).First().IsExtended &&
                        !fingers.Where(x => (x.Type.Equals(FingerType.TYPE_PINKY))).First().IsExtended)
                     {
-                        this.m_MyText.text = "1";
+                        this.currentText.text = "1";
                     }
                     //2
                     else if (!fingers.Where(x => (x.Type.Equals(FingerType.TYPE_THUMB))).First().IsExtended &&
@@ -58,7 +77,7 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
                        !fingers.Where(x => (x.Type.Equals(FingerType.TYPE_RING))).First().IsExtended &&
                        !fingers.Where(x => (x.Type.Equals(FingerType.TYPE_PINKY))).First().IsExtended)
                     {
-                        this.m_MyText.text = "2";
+                        this.currentText.text = "2";
                     }
                     //3
                     else if (fingers.Where(x => (x.Type.Equals(FingerType.TYPE_THUMB))).First().IsExtended &&
@@ -67,7 +86,7 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
                        !fingers.Where(x => (x.Type.Equals(FingerType.TYPE_RING))).First().IsExtended &&
                        !fingers.Where(x => (x.Type.Equals(FingerType.TYPE_PINKY))).First().IsExtended)
                     {
-                        this.m_MyText.text = "3";
+                        this.currentText.text = "3";
                     }
                     //4
                     else if (!fingers.Where(x => (x.Type.Equals(FingerType.TYPE_THUMB))).First().IsExtended &&
@@ -76,7 +95,7 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
                        fingers.Where(x => (x.Type.Equals(FingerType.TYPE_RING))).First().IsExtended &&
                        fingers.Where(x => (x.Type.Equals(FingerType.TYPE_PINKY))).First().IsExtended)
                     {
-                        this.m_MyText.text = "4";
+                        this.currentText.text = "4";
                     }
                     //5
                     else if (fingers.Where(x => (x.Type.Equals(FingerType.TYPE_THUMB))).First().IsExtended &&
@@ -85,7 +104,7 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
                        fingers.Where(x => (x.Type.Equals(FingerType.TYPE_RING))).First().IsExtended &&
                        fingers.Where(x => (x.Type.Equals(FingerType.TYPE_PINKY))).First().IsExtended)
                     {
-                        this.m_MyText.text = "5";
+                        this.currentText.text = "5";
                     }
                     //6
                     else if (!fingers.Where(x => (x.Type.Equals(FingerType.TYPE_THUMB))).First().IsExtended &&
@@ -94,7 +113,7 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
                        fingers.Where(x => (x.Type.Equals(FingerType.TYPE_RING))).First().IsExtended &&
                        !fingers.Where(x => (x.Type.Equals(FingerType.TYPE_PINKY))).First().IsExtended)
                     {
-                        this.m_MyText.text = "6";
+                        this.currentText.text = "6";
                     }
                     //7
                     else if (!fingers.Where(x => (x.Type.Equals(FingerType.TYPE_THUMB))).First().IsExtended &&
@@ -103,7 +122,7 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
                        !fingers.Where(x => (x.Type.Equals(FingerType.TYPE_RING))).First().IsExtended &&
                        fingers.Where(x => (x.Type.Equals(FingerType.TYPE_PINKY))).First().IsExtended)
                     {
-                        this.m_MyText.text = "7";
+                        this.currentText.text = "7";
                     }
                     //8
                     else if (!fingers.Where(x => (x.Type.Equals(FingerType.TYPE_THUMB))).First().IsExtended &&
@@ -112,7 +131,7 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
                        fingers.Where(x => (x.Type.Equals(FingerType.TYPE_RING))).First().IsExtended &&
                        fingers.Where(x => (x.Type.Equals(FingerType.TYPE_PINKY))).First().IsExtended)
                     {
-                        this.m_MyText.text = "8";
+                        this.currentText.text = "8";
                     }
                     //9
                     else if (!fingers.Where(x => (x.Type.Equals(FingerType.TYPE_THUMB))).First().IsExtended &&
@@ -121,7 +140,7 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
                        fingers.Where(x => (x.Type.Equals(FingerType.TYPE_RING))).First().IsExtended &&
                        fingers.Where(x => (x.Type.Equals(FingerType.TYPE_PINKY))).First().IsExtended)
                     {
-                        this.m_MyText.text = "9";
+                        this.currentText.text = "9";
                     }
                     //10
                     else if (fingers.Where(x => (x.Type.Equals(FingerType.TYPE_THUMB))).First().IsExtended &&
@@ -130,12 +149,13 @@ namespace Assets.Plugins.LeapMotion.Core.Scripts
                        !fingers.Where(x => (x.Type.Equals(FingerType.TYPE_RING))).First().IsExtended &&
                        !fingers.Where(x => (x.Type.Equals(FingerType.TYPE_PINKY))).First().IsExtended)
                     {
-                        this.m_MyText.text = "10";
+                        this.currentText.text = "10";
                     }
                     else //unknown
                     {
-                        this.m_MyText.text = "UNKNOWN";
+                        this.currentText.text = "UNKNOWN";
                     }
+                    UI.UpdateHandValue(this.currentText.text);
                 }
             }
         }
