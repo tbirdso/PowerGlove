@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &270014181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,9 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7edac04c6fe431945a86b9c53ff4e787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dataFile: Data/Leap/compiled_leap_noext.csv
+  dataFile: Data/combined_glove_m2.csv
   agent: {fileID: 270014183}
-  doInference: 0
+  doInference: 1
   indexFixed: 0
   recordIndex: 1
 --- !u!4 &270014182
@@ -182,10 +182,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb56b8442d56b046acbe0ae883a8d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NUM_FEATURES: 40
-  NUM_LABELS: 11
-  graphModel: {fileID: 4900000, guid: e5e4bed1795d9f44aa3e1504d48c1678, type: 3}
-  isDebug: 0
+  NUM_FEATURES: 7
+  NUM_LABELS: 4
+  graphModel: {fileID: 4900000, guid: 70510c5a5a9a47b4fa65569e7426776a, type: 3}
+  isDebug: 1
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +426,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2058981177
 Transform:
   m_ObjectHideFlags: 0
