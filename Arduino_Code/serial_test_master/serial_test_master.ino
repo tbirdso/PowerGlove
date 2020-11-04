@@ -1,11 +1,11 @@
-/*  Connect 2 -> 2
- *  Connect 3 -> 3
+/*  Connect 12 -> 11
+ *  Connect 11 -> 12
  */
 
 #include <SoftwareSerial.h>
 
 
-SoftwareSerial mySerial(2, 3); // RX, TX
+SoftwareSerial mySerial(12, 11); // RX, TX
 
 int message = 0;
 
@@ -21,6 +21,7 @@ void setup()
   // Software Serial needs to be on the same Baud Rate
   // and on a different Baud rate than the Serial output (but maybe not)
   mySerial.begin(9600);
+  Serial.println("Starting!");
 }
 
 void loop()
@@ -35,7 +36,7 @@ void loop()
     // Blink LED on pin 5 using message
   if (message == 1){
     digitalWrite(5, HIGH);
-    mySerial.write(25);         // Talk back to slave
+    mySerial.write(1);         // Talk back to slave
   }
     
   if (message == 0)

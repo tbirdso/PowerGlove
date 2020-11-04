@@ -1,18 +1,19 @@
-/*  Connect 2 -> 2
- *  Connect 3 -> 3
+/*  Connect 11 -> 12
+ *  Connect 12 -> 11
  */
 
 int response = 0;
+int one = 1;
+int zero = 2;
 
-#include <SoftwareSerial.h>
-SoftwareSerial mySerial(3, 2); // RX, TX
+UART mySerial(digitalPinToPinName(11), digitalPinToPinName(12), NC, NC);  //RX TX
 
 void setup()
 {
   // Open serial communications and wait for port to open:
   mySerial.begin(9600);  
   delay(100);
-  pinMode(5, OUTPUT);
+  pinMode(13, OUTPUT);
   
 }
 
@@ -23,13 +24,13 @@ void loop()
     response += mySerial.read();
 
   if (response > 255) response = 0;
-  analogWrite(5, response);
+  analogWrite(13, response);
 
   
-  mySerial.write(char(1));
+  mySerial.print((char)5);
   delay(500);
-  mySerial.write(char(0));
+  mySerial.write((char)0);
   delay(500);
-//  mySerial.write(char(255));
-//  delay(500);
+  mySerial.write(char(255));
+  delay(500);
 }
