@@ -405,6 +405,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraDist: 5
   cameraSpeed: 2
+--- !u!1 &983085168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 983085171}
+  - component: {fileID: 983085170}
+  - component: {fileID: 983085169}
+  m_Layer: 0
+  m_Name: TestTensorflow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &983085169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983085168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eb56b8442d56b046acbe0ae883a8d51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NUM_FEATURES: 7
+  NUM_LABELS: 4
+  graphModel: {fileID: 4900000, guid: bd374f0263af5e44d85c229714194286, type: 3}
+  isDebug: 1
+--- !u!114 &983085170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983085168}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7edac04c6fe431945a86b9c53ff4e787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataFile: Data/combined_glove_m2_255_range.csv
+  agent: {fileID: 983085169}
+  doInference: 1
+  indexFixed: 0
+  recordIndex: 1
+--- !u!4 &983085171
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983085168}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.3090582, y: -0.46128654, z: -11.844906}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1093165447
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,8 +698,13 @@ PrefabInstance:
     - target: {fileID: 1046265270181960157, guid: f38b3e982a5be1041a3d167fcf01a202,
         type: 3}
       propertyPath: portName
-      value: COM6
+      value: COM5
       objectReference: {fileID: 0}
+    - target: {fileID: 1046265270181960157, guid: f38b3e982a5be1041a3d167fcf01a202,
+        type: 3}
+      propertyPath: agent
+      value: 
+      objectReference: {fileID: 983085169}
     - target: {fileID: 1046265270404943651, guid: f38b3e982a5be1041a3d167fcf01a202,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -695,5 +765,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Right_Hand
       objectReference: {fileID: 0}
+    - target: {fileID: 1046265270408551937, guid: f38b3e982a5be1041a3d167fcf01a202,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 04ec55363c2918d46a0c0df179ad650e, type: 3}
+    - target: {fileID: 1046265270408551937, guid: f38b3e982a5be1041a3d167fcf01a202,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3189c7a14bdfe1441b824d1d54366247, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f38b3e982a5be1041a3d167fcf01a202, type: 3}
