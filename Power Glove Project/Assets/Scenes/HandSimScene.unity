@@ -630,6 +630,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1046265270181960157, guid: f38b3e982a5be1041a3d167fcf01a202,
+        type: 3}
+      propertyPath: portName
+      value: COM6
+      objectReference: {fileID: 0}
     - target: {fileID: 1046265270404943651, guid: f38b3e982a5be1041a3d167fcf01a202,
         type: 3}
       propertyPath: m_LocalPosition.x
