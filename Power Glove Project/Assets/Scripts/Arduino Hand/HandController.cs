@@ -1,115 +1,110 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
+using System;
+using System.IO.Ports;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 public class HandController : MonoBehaviour
 {
     public Transform wrist;
-    public Hand hand;
+    public string portName = "COM6";
+    public int baudRate = 115200;
 
-    /* Moving Fingers
-     hand.fingers[FINGER OPTION].BendJoint(JOINT OPTION, ANGLE);
-     hand.fingers[FINGER OPTION].SpreadFinger(ANGLE);
-
-     FINGER 0PTION = Hand.INDEX, Hand.MIDDLE, Hand.RING, or Hand.PINKY
-     JOINT OPTION = Finger.IP or Finger.MCP
-     ANGLE = 0 to 90 degrees (you can put any angle, but outside of this range is pretty much physically impossible for a real hand)
-     */
-
-    /* Moving Thumb 
-    hand.thumb.BendJoint(JOINT OPTION, ANGLE);
-    hand.thumb.OpposeThumb(ANGLE);
-
-    JOINT OPTION = Thumb.IP or Thumb.MCP
-    ANGLE = 0 to 90 degrees
-     */
-
-    /* Moving Hand 
-    hand.RotateHand(AXIS, ANGLE);
-
-    AXIS = Vector3.right for x-axis in world coords or Vector3.forward for z-axis in world coords
-    ANGLE = Angle in degrees
-     */
+    private Hand hand;
+    private SerialPort sp;
 
     void Start() //Called before the first frame
     {
+        //Init serial port
+        sp = new SerialPort(portName, baudRate);
+        sp.Open();
+        sp.ReadTimeout = 10000;
+
         hand = new Hand(wrist);
     }
 
-    void OnConnectionEvent(bool success) //Called when attempting to connect to COM port
+    void Update() //Called every frame
     {
-        if (success)
+        //Poll the serial port
+        try
         {
-            print("Connected\n");
+            if (!sp.IsOpen)
+            {
+                sp.Open();
+            }
+
+            var JsonString = GetJSONstring();
+            if(JsonString == null) //Ignore Json strings that had errors
+            {
+                return;
+            }
+            var glove = (PowerGlove)JsonConvert.DeserializeObject(JsonString, typeof(PowerGlove));
+
+            //Write data from Json pacakge to the hand
+            hand.fingers[Hand.INDEX].BendJoint(Finger.MCP, ScaleNum(glove.index_mcp));
+            hand.fingers[Hand.INDEX].BendJoint(Finger.IP, ScaleNum(glove.index_pip));
+            hand.fingers[Hand.MIDDLE].BendJoint(Finger.MCP, ScaleNum(glove.middle_mcp));
+            hand.fingers[Hand.MIDDLE].BendJoint(Finger.IP, ScaleNum(glove.middle_pip));
+            hand.fingers[Hand.RING].BendJoint(Finger.MCP, ScaleNum(glove.ring_mcp));
+            hand.fingers[Hand.RING].BendJoint(Finger.IP, ScaleNum(glove.ring_pip));
+            hand.fingers[Hand.PINKY].BendJoint(Finger.MCP, ScaleNum(glove.pinky_mcp));
+            hand.fingers[Hand.PINKY].BendJoint(Finger.IP, ScaleNum(glove.pinky_pip));
+            hand.thumb.BendJoint(Thumb.MCP, ScaleNum(glove.thumb_mcp));
+            hand.thumb.BendJoint(Thumb.IP, ScaleNum(glove.thumb_pip));
+
+            //Need to write this function, will probably need to have the glove to test as I go
+            hand.spreadFingers(ScaleNum(glove.index_hes), ScaleNum(glove.ring_hes), ScaleNum(glove.pinky_hes), ScaleNum(glove.thumb_hes));
+
+            //Manually spread a single finger wihtout regard to the other fingers, will be replaced with above function
+            hand.fingers[Hand.INDEX].SpreadFinger(ScaleNum(glove.index_hes));
+            hand.fingers[Hand.RING].SpreadFinger(ScaleNum(glove.ring_hes));
+            hand.fingers[Hand.PINKY].SpreadFinger(ScaleNum(glove.pinky_hes));
+            hand.thumb.SpreadThumb(ScaleNum(glove.thumb_hes));
+
+            //May need to rewrite this function. I cannot tell if it is working with potentiometers, I need the gyroscope in hand to test
+            hand.RotateHand(ScaleNum(glove.pitch), ScaleNum(glove.yaw), ScaleNum(glove.roll));
         }
-        else
+        catch (System.Exception ex)
         {
-            print("Connection Failure\n");
+            throw;
         }
     }
 
-    void OnMessageArrived(string msg) //Called when a line is received on the COM port
+    private string GetJSONstring()
     {
-        /* ARDUINO CODE USED TO SEND DATA
-         
-            int IP;
-            int MCP;
-            int analogIP = A0;
-            int analogMCP = A3;
-            int threshold = 3;
-
-            void setup() {
-              // put your setup code here, to run once:
-              pinMode(analogIP, INPUT);
-              pinMode(analogMCP, INPUT);
-              Serial.begin(9600);
-            }
-
-            void loop() {
-              //Send IP Joint when change is greater than threshold
-              int temp = analogRead(analogIP);
-              if(abs(IP - temp) > threshold){
-                IP = temp;
-                Serial.print("1,");
-                Serial.print(IP);
-                Serial.println();
-              }
-
-              //Send MCP Joint when change is greater than threshold
-              temp = analogRead(analogMCP);
-              if(abs(MCP - temp) > threshold){
-                MCP = temp;
-                Serial.print("2,");
-                Serial.print(MCP);
-                Serial.println();
-              }
-  
-              delay(10);
-            }
-        */
-
-        //Message is formatted as x,Y where x is the joint and Y is the unscaled value for the joint
-        int joint = int.Parse(msg.Split(',')[0]);
-        int val = int.Parse(msg.Split(',')[1]);
-
-        print(joint + "     " + val + "\n");
-
-        if (joint == 1)
+        string serialBuffer = "";
+        while (!serialBuffer.Equals("{")) //Look for start of Json string
         {
-            hand.fingers[Hand.INDEX].BendJoint(Finger.IP, ScaleNum(val));
-            hand.fingers[Hand.MIDDLE].BendJoint(Finger.IP, ScaleNum(val));
-            hand.fingers[Hand.RING].BendJoint(Finger.IP, ScaleNum(val));
-            hand.fingers[Hand.PINKY].BendJoint(Finger.IP, ScaleNum(val));
-            hand.thumb.BendJoint(Thumb.IP, ScaleNum(val));
+            serialBuffer = sp.ReadLine();
         }
-        else if(joint == 2)
-        { 
-            hand.fingers[Hand.INDEX].BendJoint(Finger.MCP, ScaleNum(val));
-            hand.fingers[Hand.MIDDLE].BendJoint(Finger.MCP, ScaleNum(val));
-            hand.fingers[Hand.RING].BendJoint(Finger.MCP, ScaleNum(val));
-            hand.fingers[Hand.PINKY].BendJoint(Finger.MCP, ScaleNum(val));
-            hand.thumb.BendJoint(Thumb.MCP, ScaleNum(val));
+
+        int count = 1;
+        while (true)
+        {
+            string value = sp.ReadLine();
+            serialBuffer += value;
+            if (value.Equals("{")) //If another open bracket is found, return null
+            {
+                return null;
+            }
+
+            if (value.Equals("}")) //Break out of the loop and return the Json string
+            {
+                break;
+            }
+
+            count++;
+            if(count >= PowerGlove.size) //If the closing bracket is not found when it should be, return null
+            {
+                return null;
+            }
         }
+
+        return serialBuffer;
     }
 
     private float ScaleNum(int num)
@@ -118,9 +113,5 @@ public class HandController : MonoBehaviour
         float m = 0.08797f;
         return m * (float)num;
     }
-
-    void Update() //Called every frame
-    {
-
-    }
 }
+

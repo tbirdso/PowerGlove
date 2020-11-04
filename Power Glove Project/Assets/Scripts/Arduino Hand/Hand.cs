@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class Hand
@@ -82,22 +81,27 @@ public class Hand
         return fingerCount;
     }
 
-    public void RotateHand(Vector3 axis, float angle)
+    public void RotateHand(float pitch, float yaw, float roll)
     {
         if(this.wrist != null)
         {
-            //Rotate the wrist and all children around the given axis
-            if (axis == Vector3.right)
-            {
-                this.wrist.Rotate(axis, this.yAngle - angle, Space.World);
-                this.yAngle = angle;
-            }
-            else if(axis == Vector3.forward)
-            {
-                this.wrist.Rotate(axis, this.zAngle - angle, Space.World);
-                this.zAngle = angle;
-            }
+            //Rotate the hand at the wrist
+
+            this.wrist.Rotate(this.xAngle - roll, 0f, 0f, Space.Self);
+            this.xAngle = roll;
+
+            this.wrist.Rotate(0f, this.yAngle - yaw, 0f, Space.Self);
+            this.yAngle = yaw;
+            
+            this.wrist.Rotate(0f, 0f, this.zAngle - pitch, Space.Self);
+            this.zAngle = pitch;
         }
+    }
+
+    public void spreadFingers(float indexLoc, float ringLoc, float pinkyLoc, float thumbLoc)
+    {
+        //Handle finger spreading here because the hand object has access to all fingers
+        //Will need to think about this and maybe write the function with the glove in hand for testing
     }
 
     public override string ToString()
