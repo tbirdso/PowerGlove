@@ -42,7 +42,7 @@ NUM_DENSE_NODES = 50
 P_DROPOUT = 0.5
 
 # Training values
-NUM_EPOCHS = 50
+NUM_EPOCHS = 25
 
 # Feature names and Label column
 class colName(Enum):
