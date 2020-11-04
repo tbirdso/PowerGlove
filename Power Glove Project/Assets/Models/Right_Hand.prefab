@@ -117,7 +117,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1046265270404943651}
   - component: {fileID: 1046265270181960157}
-  - component: {fileID: 1046265270181960154}
   m_Layer: 0
   m_Name: Right_Hand
   m_TagString: Untagged
@@ -154,25 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wrist: {fileID: 1046265270404943639}
-  spreadangle: 0
-  oppangle: 0
---- !u!114 &1046265270181960154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1046265270405370627}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bc5f48af2cffd747a079fe8c632e2c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  portName: COM5
-  baudRate: 9600
-  messageListener: {fileID: 1046265270405370627}
-  reconnectionDelay: 1000
-  maxUnreadMessages: 1
+  portName: COM3
+  baudRate: 115200
 --- !u!1 &1046265270405370629
 GameObject:
   m_ObjectHideFlags: 0
