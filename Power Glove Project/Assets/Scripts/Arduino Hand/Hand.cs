@@ -10,15 +10,15 @@ public class Hand
     public const int PINKY = 3;
     public const int THUMB = 4;
 
+    public const float delta = 3f;
+
     private readonly Transform wrist;
     public Transform Wrist => this.wrist;
     public Finger[] fingers;
     public Thumb thumb;
 
-    private float xAngle;
-    private float yAngle;
-    private float zAngle;
-
+    private float roll;
+    private float pitch;
 
     public Hand()
     {
@@ -26,9 +26,8 @@ public class Hand
         this.fingers = new Finger[4];
         this.thumb = null;
 
-        this.xAngle = 0;
-        this.yAngle = 0;
-        this.zAngle = 0;
+        this.roll = 0;
+        this.pitch = 0;
     }
 
     public Hand(Transform wristNode)
@@ -37,9 +36,8 @@ public class Hand
         this.fingers = new Finger[4];
         this.thumb = null;
 
-        this.xAngle = 0;
-        this.yAngle = 0;
-        this.zAngle = 0;
+        this.roll = 0;
+        this.pitch = 0;
 
         if (wristNode != null)
         {
@@ -81,27 +79,44 @@ public class Hand
         return fingerCount;
     }
 
-    public void RotateHand(float pitch, float yaw, float roll)
+    public void RotateHand(float xAccel, float yAccel, float zAccel)
     {
-        if(this.wrist != null)
+        //Rotate the hand at the wrist
+        if (this.wrist != null)
         {
-            //Rotate the hand at the wrist
+            float newroll = Mathf.Atan2(xAccel, zAccel) * Mathf.Rad2Deg;
+            float newpitch = -Mathf.Atan2(yAccel, zAccel) * Mathf.Rad2Deg;
 
-            this.wrist.Rotate(this.xAngle - roll, 0f, 0f, Space.Self);
-            this.xAngle = roll;
+            if (Mathf.Abs(this.roll - newroll) > delta)
+            {
+                newroll = (newroll + this.roll) / 2f; //Average the old and new values to look smoother
+                this.wrist.rotation *= Quaternion.Euler(this.roll - newroll, 0, 0);
+                this.roll = newroll;
+            }
 
-            this.wrist.Rotate(0f, this.yAngle - yaw, 0f, Space.Self);
-            this.yAngle = yaw;
-            
-            this.wrist.Rotate(0f, 0f, this.zAngle - pitch, Space.Self);
-            this.zAngle = pitch;
+            if (Mathf.Abs(this.pitch - newpitch) > delta)
+            {
+                newpitch = (newpitch + this.pitch) / 2f; //Average the old and new values to look smoother
+                this.wrist.rotation *= Quaternion.Euler(0, 0, this.pitch - newpitch);
+                this.pitch = newpitch;
+            }
         }
     }
 
     public void spreadFingers(float indexLoc, float ringLoc, float pinkyLoc, float thumbLoc)
     {
-        //Handle finger spreading here because the hand object has access to all fingers
-        //Will need to think about this and maybe write the function with the glove in hand for testing
+        //Call finger spreading here because the hand object has access to all the fingers
+
+        if (this.wrist != null) {
+            Finger index = this.fingers[INDEX];
+            Finger middle = this.fingers[MIDDLE];
+            Finger ring = this.fingers[RING];
+            Finger pinky = this.fingers[PINKY];
+
+            middle.SpreadFinger(index, indexLoc);
+            middle.SpreadFinger(ring, ringLoc);
+            ring.SpreadFinger(pinky, -pinkyLoc);                     
+        }
     }
 
     public override string ToString()
@@ -111,7 +126,7 @@ public class Hand
         handData += "Ring: " + this.fingers[RING].ToString();
         handData += "Pinky: " + this.fingers[PINKY].ToString();
         handData += "Thumb: " + this.thumb.ToString();
-        handData += "Wrist rotation: " + (new Vector3(this.xAngle, this.yAngle, this.zAngle)).ToString() + "\n";
+        handData += "Hand Pitch: " + this.pitch + "\tHand Roll: " + this.roll+ "\n";
         return handData;
     }
 }

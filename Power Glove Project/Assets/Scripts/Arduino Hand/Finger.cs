@@ -1,4 +1,6 @@
 ﻿
+using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Finger
@@ -8,6 +10,8 @@ public class Finger
     public const int PIP = 1;
     public const int MCP = 2;
     public const int boneChainLength = 3;
+
+    public const float delta = 2f;
 
     private float ipAngle;
     private float mcpAngle;
@@ -73,15 +77,24 @@ public class Finger
             {
                 //Rotate MCP around z-axis referenced from the wrist
                 //Using the z-axis in its local space has unintended effects due to finger rotation and spread
-                this.joints[MCP].transform.Rotate(this.hand.Wrist.forward, this.mcpAngle - angle, Space.World);
-                this.mcpAngle = angle;
+
+                if (Mathf.Abs(this.mcpAngle - angle) > delta)
+                {
+                    angle = (this.mcpAngle + angle) / 2f;
+                    this.joints[MCP].transform.Rotate(this.hand.Wrist.forward, this.mcpAngle - angle, Space.World);
+                    this.mcpAngle = angle;
+                }
             }
             else
             {
                 //Rotate both IP joints around their local space z-axis
-                this.joints[DIP].transform.Rotate(Vector3.forward, this.ipAngle - angle, Space.Self);
-                this.joints[PIP].transform.Rotate(Vector3.forward, this.ipAngle - angle, Space.Self);
-                this.ipAngle = angle;
+                if (Mathf.Abs(this.ipAngle - angle) > delta)
+                {
+                    angle = (this.ipAngle + angle) / 2f;
+                    this.joints[DIP].transform.Rotate(Vector3.forward, this.ipAngle - angle, Space.Self);
+                    this.joints[PIP].transform.Rotate(Vector3.forward, this.ipAngle - angle, Space.Self);
+                    this.ipAngle = angle;
+                }
             }
         }
     }
@@ -91,15 +104,47 @@ public class Finger
         if(this.joints != null)
         {
             //Rotate MCP joint around local space y-axis
-            this.joints[MCP].transform.Rotate(Vector3.up, this.spreadAngle - angle, Space.Self);
-            this.spreadAngle = angle;
+
+            if (Mathf.Abs(this.spreadAngle - angle) > delta)
+            {
+                angle = (this.spreadAngle + angle) / 2f;
+                this.joints[MCP].transform.Rotate(Vector3.up, this.spreadAngle - angle, Space.Self);
+                this.spreadAngle = angle;
+            }
         }
     }
 
-    public void SpreadFinger(Finger otherFinger)
+    public void SpreadFinger(Finger otherFinger, float angle)
     {
-        //Place holder for creating anlges between two fingers
-        //NEED TO DO
+        //The base object is the finger that the other finger will be referenced from
+
+        if (this.joints != null)
+        {
+            //If either finger is bent, set both spread angles to zero
+            if (this.IsBent() || otherFinger.IsBent())
+            {
+                this.SpreadFinger(0);
+                otherFinger.SpreadFinger(0);
+            }
+            else
+            {
+                if (otherFinger.fingerType == Hand.RING)
+                {
+                    //The ring and middle finger move from each other
+                    this.SpreadFinger(angle / 2);
+                    otherFinger.SpreadFinger(-angle / 2);
+                }
+                else
+                {
+                    //Pinky and Index finger move from the middle or ring finger
+                    otherFinger.SpreadFinger(this.spreadAngle + angle);
+                }
+            }
+        }
+    }
+
+    public bool IsBent() {
+        return this.mcpAngle > 30f;
     }
 
     public override string ToString()
