@@ -13,6 +13,8 @@ public class HandController : MonoBehaviour
     public Transform wrist;
     public string portName = "COM5";
     public int baudRate = 115200;
+
+    public GloveTrainingBuffer buf;
     public TFSharpAgent agent;
 
     private Hand hand;
@@ -46,12 +48,13 @@ public class HandController : MonoBehaviour
             var glove = (PowerGlove)JsonConvert.DeserializeObject(JsonString, typeof(PowerGlove));
 
             // thumb_mcp	 thumb_pip	 thumb_hes	 index_mcp	 index_pip	 middle_mcp	 middle_pip
+            if (buf != null) buf.AddData(glove);
 
-
-
-            var result = agent.RunInference(new List<float>() {glove.thumb_mcp, glove.thumb_pip, glove.thumb_hes, glove.index_mcp, glove.index_pip, glove.middle_mcp, glove.middle_pip});
-
-            Defs.Debug(result.ToString());
+            if (agent != null)
+            {
+                var result = agent.RunInference(new List<float>() { glove.thumb_mcp, glove.thumb_pip, glove.thumb_hes, glove.index_mcp, glove.index_pip, glove.middle_mcp, glove.middle_pip });
+                Defs.Debug(result.ToString());
+            }
 
             //Write data from Json pacakge to the hand
             hand.thumb.BendJoint(Thumb.MCP, ScaleNum(glove.thumb_mcp));
