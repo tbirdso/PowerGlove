@@ -375,7 +375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   manager: {fileID: 1299048376}
   record: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  isDebug: 0
+  isDebug: 1
   RecordReady:
     m_PersistentCalls:
       m_Calls: []
@@ -394,7 +394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ce0914ec8964e144904a7ac48429bf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebug: 0
+  isDebug: 1
   filename: Data/train.csv
   featureNames: []
   buffer: {fileID: 799065609}

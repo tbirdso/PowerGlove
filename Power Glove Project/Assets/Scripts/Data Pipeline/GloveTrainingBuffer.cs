@@ -24,7 +24,7 @@ public class GloveTrainingBuffer : DataBuffer<int>
         // If the user presses the "enter" key during training then
         // make whatever data is in the buffer available as a
         // "complete" data set
-        if(Input.GetKey("enter"))
+        if(Input.GetKeyDown("return"))
         {
             makeBufferAvailable();
         }
