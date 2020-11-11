@@ -1,6 +1,4 @@
-﻿
-using Boo.Lang;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
 public class PowerGlove
@@ -29,9 +27,9 @@ public class PowerGlove
     [JsonProperty("s")] public int roll { get; set; }
     [JsonProperty("t")] public int yaw { get; set; }
 
-    public System.Collections.Generic.List<int> ToList()
+    public List<int> ToList()
     {
-        return new System.Collections.Generic.List<int>()
+        return new List<int>()
         {
             index_mcp, index_pip, middle_mcp,
             middle_pip, ring_mcp, ring_pip,
