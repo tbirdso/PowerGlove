@@ -30,11 +30,11 @@ public class DataBuffer<T> : MonoBehaviour
     public UnityEvent LabelledSetReady = new UnityEvent();
 
     // Serial buffer to store data point, may be incomplete
-    private SortedList<int,T> recordBuf = new SortedList<int,T>();
+    protected SortedList<int,T> recordBuf = new SortedList<int,T>();
     // Buffer to store labelled records, may not be full
-    private T[,] labelSetBuf =
+    protected T[,] labelSetBuf =
         new T[Defs.NUM_TRAINING_RECORDS, Defs.NUM_TRAINING_COLS];
-    private int labelSetIndex = 0;
+    protected int labelSetIndex = 0;
 
     #endregion
 
@@ -83,22 +83,16 @@ public class DataBuffer<T> : MonoBehaviour
         // then push it to the on-demand member and create a new buffer
         if(isSetBufferFull())
         {
-            labelledSet = labelSetBuf;
-
-            labelSetIndex = 0;
-            labelSetBuf = new T[Defs.NUM_TRAINING_RECORDS, Defs.NUM_TRAINING_COLS];
-
-            if (LabelledSetReady != null)
-                LabelledSetReady.Invoke();
+            makeBufferAvailable();
         }
     }
 
     #endregion
 
-    #region Private Methods
+    #region Protected Methods
     // Determine whether the sorted list has at least one
     // element for every sensor
-    bool isRecBufferFull()
+    protected bool isRecBufferFull()
     {
         // TODO handle label column
         return (manager.IsTraining) ? 
@@ -106,9 +100,23 @@ public class DataBuffer<T> : MonoBehaviour
     }
 
     // Determine whether all rows in the set buffer are filled
-    bool isSetBufferFull()
+    protected bool isSetBufferFull()
     {
         return (labelSetIndex == Defs.NUM_TRAINING_RECORDS);
+    }
+
+    // Set the "complete" set to point to the existing training set buffer
+    // and create a new, empty set buffer.
+    // Also fire an event to let dependent objects know that a new set is ready.
+    protected void makeBufferAvailable()
+    {
+        labelledSet = labelSetBuf;
+
+        labelSetIndex = 0;
+        labelSetBuf = new T[Defs.NUM_TRAINING_RECORDS, Defs.NUM_TRAINING_COLS];
+
+        if (LabelledSetReady != null)
+            LabelledSetReady.Invoke();
     }
 
     #endregion

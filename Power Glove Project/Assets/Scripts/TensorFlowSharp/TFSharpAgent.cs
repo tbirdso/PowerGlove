@@ -105,8 +105,7 @@ public class TFSharpAgent : MonoBehaviour
     {
         if(graphModel == null)
         {
-            Defs.Debug("No graph model was set. " +
-                "Will collect training data instead of running inference.");
+            Defs.Debug("No graph model was set. Cannot run inference.");
             return false;
         }
 

@@ -11,6 +11,7 @@ public class CSVWriter : MonoBehaviour
 {
     #region Members
     public const char delim = ',';
+    public bool isDebug;
 
     // Buffer for records with appended labels
     public int[,] data;
@@ -31,29 +32,6 @@ public class CSVWriter : MonoBehaviour
     {
         index = 0;
         data = new int[Defs.NUM_TRAINING_RECORDS, Defs.NUM_TRAINING_COLS];
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        TestParseLabel();
-
-        if (index > 0 && index < Defs.NUM_TRAINING_RECORDS)
-        {
-            UnityEngine.Debug.Log("index: " + index);
-            UnityEngine.Debug.Log("Last label: " + data[index-1, Defs.NUM_FEATURES]);
-        }
-        // If we overflow the buffer then write out data and clear the buffer
-        if(index >= Defs.NUM_TRAINING_RECORDS)
-        {
-            WriteData();
-            index = 0;
-        }
-    }
-
-    void WriteData()
-    {
-        WriteData(data);
     }
 
     // Write out data to a CSV file
@@ -83,9 +61,13 @@ public class CSVWriter : MonoBehaviour
                 }
                 builder.Remove(builder.Length - 1, 1);
 
-                UnityEngine.Debug.Log("Writing this line: " + builder.ToString());
                 outStream.WriteLine(builder.ToString());
             }
+        }
+
+        if(isDebug)
+        {
+            Defs.Debug("Data was written to " + filename);
         }
     }
 
