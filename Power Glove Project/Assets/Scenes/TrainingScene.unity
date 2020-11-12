@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &40193536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   manager: {fileID: 1299048376}
   record: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  isDebug: 1
+  isDebug: 0
   RecordReady:
     m_PersistentCalls:
       m_Calls: []
@@ -429,7 +429,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &820253896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,7 +532,7 @@ PrefabInstance:
     - target: {fileID: 1046265270181960157, guid: f38b3e982a5be1041a3d167fcf01a202,
         type: 3}
       propertyPath: portName
-      value: COM3
+      value: COM5
       objectReference: {fileID: 0}
     - target: {fileID: 1046265270181960157, guid: f38b3e982a5be1041a3d167fcf01a202,
         type: 3}
@@ -613,6 +613,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 3189c7a14bdfe1441b824d1d54366247, type: 2}
+      objectReference: {fileID: 2100000, guid: c5b9e8be6efc5c74aad1024a1e60cc0b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f38b3e982a5be1041a3d167fcf01a202, type: 3}
