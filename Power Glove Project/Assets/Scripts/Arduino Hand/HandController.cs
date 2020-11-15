@@ -57,6 +57,7 @@ public class HandController : MonoBehaviour
             }
 
             //Write data from Json pacakge to the hand
+            print(glove.index_mcp);
             hand.fingers[Hand.INDEX].BendJoint(Finger.MCP, ScaleBend(glove.index_mcp));
             hand.fingers[Hand.INDEX].BendJoint(Finger.IP, ScaleBend(glove.index_pip));
 
