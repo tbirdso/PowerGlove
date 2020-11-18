@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class PowerGlove
 {
     //size includes the open and closing brackets + number of elements in object
-    public const int size = 22;
+    public const int size = 20;
 
     [JsonProperty("a")] public int index_mcp { get; set; }
     [JsonProperty("b")] public int index_pip { get; set; }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 public class HandController : MonoBehaviour
 {
     public Transform wrist;
-    public string portName = "COM6";
+    public string portName = "COM5";
     public int baudRate = 115200;
 
     public GloveTrainingBuffer buf;
@@ -41,7 +41,7 @@ public class HandController : MonoBehaviour
             }
 
             var JsonString = GetJSONstring();
-            if(JsonString == null) //Ignore Json strings that had errors
+            if (JsonString == null) //Ignore Json strings that had errors
             {
                 return;
             }
@@ -57,7 +57,6 @@ public class HandController : MonoBehaviour
             }
 
             //Write data from Json pacakge to the hand
-            print(glove.index_mcp);
             hand.fingers[Hand.INDEX].BendJoint(Finger.MCP, ScaleBend(glove.index_mcp));
             hand.fingers[Hand.INDEX].BendJoint(Finger.IP, ScaleBend(glove.index_pip));
 
@@ -74,9 +73,8 @@ public class HandController : MonoBehaviour
             hand.thumb.BendJoint(Thumb.IP, ScaleBend(glove.thumb_pip));
 
             hand.spreadFingers(ScaleSpread(glove.index_hes), ScaleSpread(glove.ring_hes), ScaleSpread(glove.pinky_hes), ScaleSpread(glove.thumb_hes));
-            //hand.spreadFingers(100, ScaleSpread(glove.ring_hes), ScaleSpread(glove.pinky_hes), ScaleSpread(glove.thumb_hes));
 
-            //hand.RotateHand(glove.pitch, glove.roll, glove.yaw);
+            hand.RotateHand(glove.pitch, glove.roll, glove.yaw);
         }
         catch (System.Exception ex)
         {
@@ -92,7 +90,7 @@ public class HandController : MonoBehaviour
             serialBuffer = sp.ReadLine();
         }
 
-        int count = 1;
+        int count = 0;
         while (true)
         {
             string value = sp.ReadLine();
@@ -108,10 +106,11 @@ public class HandController : MonoBehaviour
             }
 
             count++;
-            if(count >= PowerGlove.size) //If the closing bracket is not found when it should be, return null
+            if (count > PowerGlove.size) //If the closing bracket is not found when it should be, return null
             {
                 return null;
             }
+            
         }
 
         return serialBuffer;
@@ -119,20 +118,24 @@ public class HandController : MonoBehaviour
 
     private float ScaleBend(int num)
     {
-        //Scale 140 - 220 to 0 - 90
-        return (float)((num - 255f) * (90f / (1f - 255f)));
-        //return -(float)((num - 140) * (90 / (220 - 140)));  // meme
-        //float m = 0.08797f;
-        //return m * (float)num;
+        //Scale 1 - 255 to 0 - 90
+        int in_min = 255;
+        int in_max = 1; 
+        int out_min = 0;
+        int out_max = 90;
+
+        return (float)((num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
     }
 
     private float ScaleSpread(int num)
     {
-        //NEED TO DO
-        //return an angle between 0 and somewhere around 30
-        //Scale 40 - 140 to 0 - 40
-        print(((num - 140f) * (40f / (40f - 140))));
-        return (float)((num - 140f) * (40f / (40f - 140f)));
+        // Scale 1 - 255 to 0 - 30
+        int in_min = 1;
+        int in_max = 255;
+        int out_min = 0;
+        int out_max = 17;
+
+        return (float)((num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
     }
 }
 

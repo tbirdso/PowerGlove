@@ -79,27 +79,39 @@ public class Hand
         return fingerCount;
     }
 
-    public void RotateHand(float xAccel, float yAccel, float zAccel)
+    public void RotateHand(float roll, float pitch, float yaw)
     {
         //Rotate the hand at the wrist
         if (this.wrist != null)
         {
-            float newroll = Mathf.Atan2(xAccel, zAccel) * Mathf.Rad2Deg;
-            float newpitch = -Mathf.Atan2(yAccel, zAccel) * Mathf.Rad2Deg;
-
-            if (Mathf.Abs(this.roll - newroll) > delta)
+            
+            if (Mathf.Abs(this.roll - roll) > delta);
             {
-                newroll = (newroll + this.roll) / 2f; //Average the old and new values to look smoother
-                this.wrist.rotation *= Quaternion.Euler(this.roll - newroll, 0, 0);
-                this.roll = newroll;
+                int in_min = 255;
+                int in_max = 1;
+                int out_min = -180;
+                int out_max = 180;
+
+                roll = (float)((roll - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
+                roll = (roll + this.roll) / 2;
+                this.wrist.rotation *= Quaternion.Euler(this.roll - roll, 0, 0);
+                this.roll = roll;
             }
 
-            if (Mathf.Abs(this.pitch - newpitch) > delta)
+            if (Mathf.Abs(this.pitch - pitch) > delta)
             {
-                newpitch = (newpitch + this.pitch) / 2f; //Average the old and new values to look smoother
-                this.wrist.rotation *= Quaternion.Euler(0, 0, this.pitch - newpitch);
-                this.pitch = newpitch;
+                int in_min = 255;
+                int in_max = 1;
+                int out_min = -180;
+                int out_max = 180;
+
+                pitch = (float)((pitch - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
+                pitch = (pitch + this.pitch) / 2;
+                this.wrist.rotation *= Quaternion.Euler(0, 0, this.pitch - pitch);
+                this.pitch = pitch;
             }
+
+
         }
     }
 
