@@ -633,17 +633,7 @@ PrefabInstance:
     - target: {fileID: 1046265270181960157, guid: f38b3e982a5be1041a3d167fcf01a202,
         type: 3}
       propertyPath: portName
-      value: COM5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1046265270181960157, guid: f38b3e982a5be1041a3d167fcf01a202,
-        type: 3}
-      propertyPath: baudRate
-      value: 115200
-      objectReference: {fileID: 0}
-    - target: {fileID: 1046265270181960157, guid: f38b3e982a5be1041a3d167fcf01a202,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      value: COM6
       objectReference: {fileID: 0}
     - target: {fileID: 1046265270404943651, guid: f38b3e982a5be1041a3d167fcf01a202,
         type: 3}
@@ -700,40 +690,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1046265270404943675, guid: f38b3e982a5be1041a3d167fcf01a202,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.1715656
-      objectReference: {fileID: 0}
-    - target: {fileID: 1046265270404943675, guid: f38b3e982a5be1041a3d167fcf01a202,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.15206279
-      objectReference: {fileID: 0}
-    - target: {fileID: 1046265270404943675, guid: f38b3e982a5be1041a3d167fcf01a202,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.026812771
-      objectReference: {fileID: 0}
-    - target: {fileID: 1046265270404943675, guid: f38b3e982a5be1041a3d167fcf01a202,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.97299707
-      objectReference: {fileID: 0}
-    - target: {fileID: 1046265270404943675, guid: f38b3e982a5be1041a3d167fcf01a202,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1046265270405370627, guid: f38b3e982a5be1041a3d167fcf01a202,
         type: 3}
       propertyPath: m_Name
       value: Right_Hand
       objectReference: {fileID: 0}
-    - target: {fileID: 1046265270408551937, guid: f38b3e982a5be1041a3d167fcf01a202,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: c5b9e8be6efc5c74aad1024a1e60cc0b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f38b3e982a5be1041a3d167fcf01a202, type: 3}
