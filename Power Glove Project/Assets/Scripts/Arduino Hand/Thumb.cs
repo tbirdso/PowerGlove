@@ -69,6 +69,9 @@ public class Thumb
                     this.joints[MCP].transform.Rotate(Vector3.forward, this.mcpAngle - angle, Space.Self);
                     this.mcpAngle = angle;
                 }
+
+                //Oppose thumb slightly when the MCP is bent, because there is no palm sensor anymore
+                this.OpposeThumb(angle / 2.5f);
             }
             else
             {
@@ -87,7 +90,19 @@ public class Thumb
     {
         if (this.joints != null)
         {
-            //NEED TO DO
+            if (this.IsBent())
+            {
+                angle = 0f;
+            }
+
+            //Rotate CMC towards the base of the index finger
+            if(Mathf.Abs(this.spreadAngle - angle) > delta)
+            {
+                angle = (this.spreadAngle + angle) / 2f; 
+                Vector3 direction = this.joints[CMC].forward - this.joints[CMC].up;
+                this.joints[CMC].transform.Rotate(direction, this.spreadAngle - angle, Space.World);
+                this.spreadAngle = angle;
+            }
         }
     }
 
@@ -105,6 +120,11 @@ public class Thumb
                 this.oppAngle = angle;
             }
         }
+    }
+
+    public bool IsBent()
+    {
+        return this.mcpAngle > 45f;
     }
 
     public override string ToString()

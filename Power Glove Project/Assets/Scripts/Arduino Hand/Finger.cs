@@ -144,7 +144,7 @@ public class Finger
     }
 
     public bool IsBent() {
-        return this.mcpAngle > 50f;
+        return this.mcpAngle > 35f;
     }
 
     public override string ToString()

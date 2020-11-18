@@ -73,8 +73,9 @@ public class HandController : MonoBehaviour
             hand.thumb.BendJoint(Thumb.IP, ScaleBend(glove.thumb_pip));
 
             hand.spreadFingers(ScaleSpread(glove.index_hes), ScaleSpread(glove.ring_hes), ScaleSpread(glove.pinky_hes), ScaleSpread(glove.thumb_hes));
+            hand.thumb.SpreadThumb(ScaleSpread(glove.thumb_hes));
 
-            hand.RotateHand(glove.pitch, glove.roll, glove.yaw);
+            hand.RotateHand(ScaleRotation(glove.roll), ScaleRotation(glove.pitch), ScaleRotation(glove.yaw));
         }
         catch (System.Exception ex)
         {
@@ -135,6 +136,17 @@ public class HandController : MonoBehaviour
         int out_min = 0;
         int out_max = 17;
 
+        return (float)((num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
+    }
+
+    private float ScaleRotation(int num)
+    {
+        //Scale glove input of [1, 255] to [-180, 180]
+        int in_min = 255;
+        int in_max = 1;
+        int out_min = -180;
+        int out_max = 180;
+        
         return (float)((num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
     }
 }

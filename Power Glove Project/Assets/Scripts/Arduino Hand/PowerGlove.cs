@@ -23,8 +23,8 @@ public class PowerGlove
     [JsonProperty("o")] public int x_acc { get; set; }
     [JsonProperty("p")] public int y_acc { get; set; }
     [JsonProperty("q")] public int z_acc { get; set; }
-    [JsonProperty("r")] public int pitch { get; set; }
-    [JsonProperty("s")] public int roll { get; set; }
+    [JsonProperty("r")] public int roll { get; set; }
+    [JsonProperty("s")] public int pitch { get; set; }
     [JsonProperty("t")] public int yaw { get; set; }
 
     public List<int> ToList()
@@ -37,7 +37,7 @@ public class PowerGlove
             thumb_pip, thumb_hes, index_hes,
             ring_hes, pinky_hes,
             x_acc, y_acc, z_acc,
-            pitch, roll, yaw
+            roll, pitch, yaw
         };
     }
 }

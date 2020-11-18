@@ -85,33 +85,19 @@ public class Hand
         if (this.wrist != null)
         {
             
-            if (Mathf.Abs(this.roll - roll) > delta);
+            if (Mathf.Abs(this.roll - roll) > delta)
             {
-                int in_min = 255;
-                int in_max = 1;
-                int out_min = -180;
-                int out_max = 180;
-
-                roll = (float)((roll - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
-                roll = (roll + this.roll) / 2;
+                roll = (roll + this.roll) / 2f; //Average new and old value for smoothing
                 this.wrist.rotation *= Quaternion.Euler(this.roll - roll, 0, 0);
                 this.roll = roll;
             }
 
             if (Mathf.Abs(this.pitch - pitch) > delta)
             {
-                int in_min = 255;
-                int in_max = 1;
-                int out_min = -180;
-                int out_max = 180;
-
-                pitch = (float)((pitch - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
-                pitch = (pitch + this.pitch) / 2;
+                pitch = (pitch + this.pitch) / 2f; //Average new and old value for smoothing
                 this.wrist.rotation *= Quaternion.Euler(0, 0, this.pitch - pitch);
                 this.pitch = pitch;
             }
-
-
         }
     }
 
