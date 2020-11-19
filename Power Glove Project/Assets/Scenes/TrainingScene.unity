@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &40193536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,9 +150,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb56b8442d56b046acbe0ae883a8d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NUM_FEATURES: 23
+  NUM_FEATURES: 20
   NUM_LABELS: 11
-  graphModel: {fileID: 0}
+  graphModel: {fileID: 4900000, guid: 08c17b7e28f25c741aba0b782e41e0f3, type: 3}
   isDebug: 0
 --- !u!4 &40193537
 Transform:
@@ -360,7 +360,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &799065609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -437,15 +437,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 820253895}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7eb56b8442d56b046acbe0ae883a8d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NUM_FEATURES: 7
-  NUM_LABELS: 4
-  graphModel: {fileID: 4900000, guid: bd374f0263af5e44d85c229714194286, type: 3}
-  isDebug: 1
+  NUM_FEATURES: 20
+  NUM_LABELS: 11
+  graphModel: {fileID: 4900000, guid: 08c17b7e28f25c741aba0b782e41e0f3, type: 3}
+  isDebug: 0
 --- !u!114 &820253897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,10 +458,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7edac04c6fe431945a86b9c53ff4e787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dataFile: Data/combined_glove_m2_255_range.csv
+  dataFile: Data/train_digits.csv
   agent: {fileID: 820253896}
   doInference: 1
-  indexFixed: 0
+  indexFixed: 1
   recordIndex: 1
 --- !u!4 &820253898
 Transform:
@@ -506,8 +506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3614f9b0290aac244a3b8ee1a2c6f6fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 40193536}
-  calibrateInterval: 5
+  agent: {fileID: 820253896}
+  calibrateInterval: 0
 --- !u!4 &1299048377
 Transform:
   m_ObjectHideFlags: 0
@@ -603,6 +603,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Right_Hand (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1046265270405370627, guid: f38b3e982a5be1041a3d167fcf01a202,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1046265270408551937, guid: f38b3e982a5be1041a3d167fcf01a202,
         type: 3}
