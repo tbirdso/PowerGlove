@@ -47,12 +47,15 @@ public class HandController : MonoBehaviour
             }
             var glove = (PowerGlove)JsonConvert.DeserializeObject(JsonString, typeof(PowerGlove));
 
-            // thumb_mcp	 thumb_pip	 thumb_hes	 index_mcp	 index_pip	 middle_mcp	 middle_pip
+            // If there is a training buffer available then add the data string
             if (buf != null) buf.AddData(glove);
 
+            // If there is an agent available then infer the ASL gesture
             if (agent != null)
             {
-                var result = agent.RunInference(new List<float>() { glove.thumb_mcp, glove.thumb_pip, glove.thumb_hes, glove.index_mcp, glove.index_pip, glove.middle_mcp, glove.middle_pip });
+                var result = agent.RunInference(glove.ToList().ConvertAll(new Converter<int, float>(x => x)));
+
+                // TODO Optionally send label to a canvas in the scene
                 Defs.Debug(result.ToString());
             }
 
