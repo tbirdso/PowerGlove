@@ -35,9 +35,9 @@ public class PowerGlove
             middle_pip, ring_mcp, ring_pip,
             pinky_mcp, pinky_pip, thumb_mcp,
             thumb_pip, thumb_hes, index_hes,
-            ring_hes, pinky_hes,
-            x_acc, y_acc, z_acc,
-            roll, pitch, yaw
+            ring_hes, pinky_hes
+            //,x_acc, y_acc, z_acc,
+            //roll, pitch, yaw
         };
     }
 }
