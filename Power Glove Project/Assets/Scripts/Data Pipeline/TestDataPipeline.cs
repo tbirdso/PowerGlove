@@ -8,7 +8,8 @@ using UnityEngine;
 // Class to test functionality of data preprocessing workflow
 public class TestDataPipeline : MonoBehaviour
 {
-    public GameStateManager manager;
+    // public GameStateManager manager;
+    public bool isTraining;
     public DataBufferInt buffer;
     public DataPreprocessor preprocessor;
     public CSVWriter writer;
@@ -31,10 +32,11 @@ public class TestDataPipeline : MonoBehaviour
     }
 
     // Update is called once per frame
-    // Generate a random data point for one sensor in each given frame
+    // Generate a random data point for one sensor in each given frame.
+    // Assume 
     void Update()
     {
-        if (manager.IsTraining)
+        if (isTraining)
         {
             // Randomly generate and add either a sensor data point or a label
             if (sensorID > Defs.NUM_TRAINING_COLS) sensorID = 0;
@@ -60,21 +62,17 @@ public class TestDataPipeline : MonoBehaviour
     // for calibration and if allowed run inference
     void OnRecordReady()
     {
-        if (!manager.IsTraining)
+        if (!isTraining)
         {
             // Updates max/min for each record and returns scaled row
             lastScaledRow = preprocessor.PreprocessRecord(buffer.record);
 
-            // Run inference if done with calibration,
-            // otherwise discard results
-            if (!manager.IsCalibrating)
-            {
-                int? label = agent.RunInference(lastScaledRow.ToList());
-                if (label.HasValue)
-                    Defs.Debug("Got label " + Defs.LABELS[label.Value]);
-                else
-                    Defs.Debug("No label returned from inference.");
-            }
+            // Run inference
+            int? label = agent.RunInference(lastScaledRow.ToList());
+            if (label.HasValue)
+                Defs.Debug("Got label " + Defs.LABELS[label.Value]);
+            else
+                Defs.Debug("No label returned from inference.");
         }
     }
 
@@ -82,7 +80,7 @@ public class TestDataPipeline : MonoBehaviour
     // Normalize data and write out to CSV
     void OnLabelledSetReady()
     {
-        if (manager.IsTraining)
+        if (isTraining)
         {
             float[,] normalizedData = preprocessor.PreprocessDataSet(buffer.labelledSet);
             // write out data

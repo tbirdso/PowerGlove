@@ -44,7 +44,7 @@ namespace Assets.Scripts
             }
             catch (System.Exception ex)
             {
-                throw;                
+                throw ex;                
             }
         }
         string GetJSONstring() 

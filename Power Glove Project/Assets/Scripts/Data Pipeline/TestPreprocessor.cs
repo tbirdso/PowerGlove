@@ -7,7 +7,8 @@ using UnityEngine;
 // Class to test functionality of data preprocessing workflow
 public class TestPreprocessor : MonoBehaviour
 {
-    public GameStateManager manager;
+    // public GameStateManager manager;
+    public bool isTraining;
     public DataPreprocessor preprocessor;
     public CSVWriter writer;
     public TFSharpAgent agent;
@@ -31,7 +32,7 @@ public class TestPreprocessor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (manager.IsTraining)
+        if (isTraining)
         {
             if (recIndex > Defs.NUM_TRAINING_RECORDS) recIndex = 0;
 
@@ -67,16 +68,12 @@ public class TestPreprocessor : MonoBehaviour
             // Updates max/min for each record and returns scaled row
             lastScaledRow = preprocessor.PreprocessRecord(realtimeData);
 
-            // Run inference if done with calibration,
-            // otherwise discard results
-            if(!manager.IsCalibrating)
-            {
-                int? label = agent.RunInference(lastScaledRow.ToList());
-                if (label.HasValue)
-                    Defs.Debug("Got label " + Defs.LABELS[label.Value]);
-                else
-                    Defs.Debug("No label returned from inference.");
-            }
+            // Run inference 
+            int? label = agent.RunInference(lastScaledRow.ToList());
+            if (label.HasValue)
+                Defs.Debug("Got label " + Defs.LABELS[label.Value]);
+            else
+                Defs.Debug("No label returned from inference.");
         }
     }
 }

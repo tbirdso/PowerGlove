@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ using UnityEngine;
 //              parameters before it can generate labels
 // - Infer: Scene is running inference with the preprocessing
 //          parameters and ML model to generate labels
+[Obsolete("Training and inference are now split into separate scenes. Calibration is not used.")]
 public class GameStateManager : MonoBehaviour
 {
     #region Members

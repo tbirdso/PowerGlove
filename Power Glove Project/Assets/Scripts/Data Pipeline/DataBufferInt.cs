@@ -9,12 +9,13 @@ using UnityEngine.Events;
 public class DataBufferInt : DataBuffer<int> { }
 
 // Store asynchronous serial data and signal to the pipeline
-// when a data point or labelled data set is available
+// when a data point or labelled data set is available.
+// Only valid for training data collection.
 public class DataBuffer<T> : MonoBehaviour
 {
     #region Members
-    [Tooltip("Determines whether the scene is in training/calibration/inference mode")]
-    public GameStateManager manager;
+    //[Tooltip("Determines whether the scene is in training/calibration/inference mode")]
+    //public GameStateManager manager;
 
     [Tooltip("Most recent complete serial data point")]
     public T[] record = new T[Defs.NUM_FEATURES];
@@ -91,12 +92,14 @@ public class DataBuffer<T> : MonoBehaviour
 
     #region Protected Methods
     // Determine whether the sorted list has at least one
-    // element for every sensor
+    // element for every sensor.
+    // Assumes we are collecting training data.
     protected bool isRecBufferFull()
     {
-        // TODO handle label column
-        return (manager.IsTraining) ? 
-            (recordBuf.Count == Defs.NUM_TRAINING_COLS) : (recordBuf.Count == Defs.NUM_FEATURES);
+        return recordBuf.Count == Defs.NUM_TRAINING_COLS;
+
+        //return (manager.IsTraining) ? 
+        //    (recordBuf.Count == Defs.NUM_TRAINING_COLS) : (recordBuf.Count == Defs.NUM_FEATURES);
     }
 
     // Determine whether all rows in the set buffer are filled

@@ -48,15 +48,18 @@ public class HandController : MonoBehaviour
             var glove = (PowerGlove)JsonConvert.DeserializeObject(JsonString, typeof(PowerGlove));
 
             // If there is a training buffer available then add the data string
-            if (buf != null) buf.AddData(glove);
+            if (buf != null && buf.gameObject.activeSelf) buf.AddData(glove);
 
             // If there is an agent available then infer the ASL gesture
-            if (agent != null)
+            if (agent != null && agent.gameObject.activeSelf)
             {
                 var result = agent.RunInference(glove.ToList().ConvertAll(new Converter<int, float>(x => x)));
 
                 // TODO Optionally send label to a canvas in the scene
-                Defs.Debug(result.ToString());
+                if (!result.HasValue)
+                    Defs.Debug("ASL sign is inferred to be null. (This probably means something is wrong!");
+                else
+                    Defs.Debug("Inferred ASL sign " + (result == 10 ? result.ToString() : "None"));
             }
 
             //Write data from Json pacakge to the hand
@@ -82,7 +85,7 @@ public class HandController : MonoBehaviour
         }
         catch (System.Exception ex)
         {
-            throw;
+            throw ex;
         }
     }
 
