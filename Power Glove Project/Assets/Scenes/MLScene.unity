@@ -216,9 +216,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb56b8442d56b046acbe0ae883a8d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NUM_FEATURES: 20
+  NUM_FEATURES: 14
   NUM_LABELS: 11
-  graphModel: {fileID: 4900000, guid: 08c17b7e28f25c741aba0b782e41e0f3, type: 3}
+  graphModel: {fileID: 4900000, guid: ca6592acb0d7d6042a9e7388600b3274, type: 3}
   isDebug: 0
 --- !u!114 &507208065
 MonoBehaviour:
@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7edac04c6fe431945a86b9c53ff4e787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dataFile: Data/train_digits.csv
+  dataFile: Data/train_digits_noaccrot.csv
   agent: {fileID: 507208064}
   doInference: 1
   indexFixed: 0
