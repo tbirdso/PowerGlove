@@ -53,13 +53,13 @@ public class HandController : MonoBehaviour
             // If there is an agent available then infer the ASL gesture
             if (agent != null && agent.gameObject.activeSelf)
             {
-                var result = agent.RunInference(glove.ToList().ConvertAll(new Converter<int, float>(x => x)));
+                var result = agent.RunInference(glove.FingersToList().ConvertAll(new Converter<int, float>(x => x)));
 
                 // TODO Optionally send label to a canvas in the scene
                 if (!result.HasValue)
                     Defs.Debug("ASL sign is inferred to be null. (This probably means something is wrong!");
                 else
-                    Defs.Debug("Inferred ASL sign " + (result == 10 ? result.ToString() : "None"));
+                    Defs.Debug("Inferred ASL sign " + (result != 10 ? result.ToString() : "None"));
             }
 
             //Write data from Json pacakge to the hand

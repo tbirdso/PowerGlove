@@ -31,10 +31,11 @@ public class GloveTrainingBuffer : DataBuffer<int>
     }
 
     // Append a label to a single glove serial record and
-    // add the combined record to a data set buffer
-    public void AddData(PowerGlove glove)
+    // add the combined record to a data set buffer, excluding
+    // IMU data from the glove
+    public void AddData(PowerGlove glove, bool includeIMU = false)
     {
-        List<int> data = glove.ToList();
+        List<int> data = (includeIMU ? glove.ToList() : glove.FingersToList());
         int? label = getKeyLabel();
 
         if(label.HasValue)

@@ -27,6 +27,7 @@ public class PowerGlove
     [JsonProperty("s")] public int pitch { get; set; }
     [JsonProperty("t")] public int yaw { get; set; }
 
+    // Returns a full list of glove sensor data (default 20 features)
     public List<int> ToList()
     {
         return new List<int>()
@@ -36,8 +37,21 @@ public class PowerGlove
             pinky_mcp, pinky_pip, thumb_mcp,
             thumb_pip, thumb_hes, index_hes,
             ring_hes, pinky_hes
-            //,x_acc, y_acc, z_acc,
-            //roll, pitch, yaw
+            ,x_acc, y_acc, z_acc,
+            roll, pitch, yaw
+        };
+    }
+
+    // Returns a shortened list that excludes IMU data (acceleration and rotation)
+    public List<int> FingersToList()
+    {
+        return new List<int>()
+        {
+            index_mcp, index_pip, middle_mcp,
+            middle_pip, ring_mcp, ring_pip,
+            pinky_mcp, pinky_pip, thumb_mcp,
+            thumb_pip, thumb_hes, index_hes,
+            ring_hes, pinky_hes
         };
     }
 }
