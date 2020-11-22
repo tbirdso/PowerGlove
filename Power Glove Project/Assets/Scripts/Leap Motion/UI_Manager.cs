@@ -18,7 +18,7 @@ namespace Assets.Scripts.Leap_Motion
         private string NeedToMake;
         void Start()
         {
-
+            UpdateNeedToMake();
         }
 
         void Update()
@@ -27,6 +27,7 @@ namespace Assets.Scripts.Leap_Motion
         }
         public UI_Manager()
         {
+            HandSigns.Add("0");
             HandSigns.Add("1");
             HandSigns.Add("2");
             HandSigns.Add("3");
@@ -36,7 +37,6 @@ namespace Assets.Scripts.Leap_Motion
             HandSigns.Add("7");
             HandSigns.Add("8");
             HandSigns.Add("9");
-            HandSigns.Add("10");
             
             UpdateNeedToMake();
             

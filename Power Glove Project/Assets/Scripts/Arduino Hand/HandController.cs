@@ -7,15 +7,17 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Leap_Motion;
 
 public class HandController : MonoBehaviour
 {
     public Transform wrist;
-    public string portName = "COM5";
+    public string portName = "COM3";
     public int baudRate = 115200;
 
     public GloveTrainingBuffer buf;
     public TFSharpAgent agent;
+    public UI_Manager UI;
 
     private Hand hand;
     private SerialPort sp;
@@ -56,10 +58,10 @@ public class HandController : MonoBehaviour
                 var result = agent.RunInference(glove.FingersToList().ConvertAll(new Converter<int, float>(x => x)));
 
                 // TODO Optionally send label to a canvas in the scene
-                if (!result.HasValue)
-                    Defs.Debug("ASL sign is inferred to be null. (This probably means something is wrong!");
-                else
-                    Defs.Debug("Inferred ASL sign " + (result != 10 ? result.ToString() : "None"));
+                if (result.HasValue)
+                { 
+                    UI.UpdateHandValue((result != 10 ? result.ToString() : "None"));
+                }
             }
 
             //Write data from Json pacakge to the hand
