@@ -19,9 +19,14 @@ int middle_mcp = A0;
 int middle_pip = A4;
 
 float x, y, z;
+float xSum, ySum, zSum;
 int xAcc, yAcc, zAcc;
 int xGyro, yGyro, zGyro;
 int val;
+
+unsigned long t = 0;
+
+unsigned long time_elapsed;
 
 void setup(void) {
   //Serial.begin(9600); 
@@ -50,19 +55,23 @@ void loop(void) {
  
   // Couldn't we just send one ID number start the line and 
   // then use the same order for the data?
+  time_elapsed = millis() - t;
 
   if(IMU.accelerationAvailable()){ //the axis values x, y, and z range from -1 to 1
     IMU.readAcceleration(x, y, z);
-    xAcc = map(x, -1, 1, 1, 255);      //scaled now at 8 to 255
+    xAcc = map(x, -1, 1, 1, 255);      //scaled now at 1 to 255
     yAcc = map(y, -1, 1, 1, 255);      //negative can't be sent on mySerial
-    zAcc = map(z, -1, 1, 1, 255);      
+    zAcc = map(z, -1, 1, 1, 255);
   }
 
   if(IMU.gyroscopeAvailable()){
     IMU.readGyroscope(x, y, z);
-    xGyro = map(x, -1000, 1000, 1, 255);      //scaled now at 8 to 255
-    yGyro = map(y, -1000, 1000, 1, 255);      //negative can't be sent on mySerial
-    zGyro = map(z, -1000, 1000, 1, 255); 
+    x = x * 1000 * time_elapsed; // in deg/ms
+    y = y * 1000 * time_elapsed;
+    z = z * 1000 * time_elapsed;
+    xSum += x; 
+    ySum += y; 
+    zSum += z; 
   }
   
 
@@ -76,6 +85,9 @@ void loop(void) {
     mySerial.write(char(xAcc));              //Accelerometer data unlabeled
     mySerial.write(char(yAcc));
     mySerial.write(char(zAcc));
+    xGyro = map(xSum, -180, 180, 1, 255);      //scaled now at 1 to 255
+    yGyro = map(ySum, -180, 180, 1, 255);      //negative can't be sent on mySerial
+    zGyro = map(zSum, -180, 180, 1, 255); 
     mySerial.write(char(xGyro));              //Accelerometer data unlabeled
     mySerial.write(char(yGyro));
     mySerial.write(char(zGyro));
@@ -103,5 +115,6 @@ void loop(void) {
     mySerial.write(char(val));
   }
   //delay(50);
+  t = millis();
   digitalWrite(13, LOW);
 }

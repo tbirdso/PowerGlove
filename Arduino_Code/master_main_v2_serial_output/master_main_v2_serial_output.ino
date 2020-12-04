@@ -31,6 +31,7 @@ int x_gyro_val;
 int y_gyro_val;
 int z_gyro_val;
 
+int val;
 
 
 int flexV, count = 0;
@@ -106,16 +107,25 @@ void loop(void) {
   root["b"] = index_pip_val; // index_pip
   root["c"] = middle_mcp_val; // middle_mcp
   root["d"] = middle_pip_val; // middle_pip
-  root["e"] = map(analogRead(ring_mcp), 0, 1023, 1, 255); // ring_mcp
-  root["f"] = map(analogRead(ring_pip), 0, 1023, 1, 255); // ring_pip
-  root["g"] = map(analogRead(pinky_mcp), 0, 1023, 1, 255); // pinky_mcp
-  root["h"] = map(analogRead(pinky_pip), 0, 1023, 1, 255); // pinky_pip
+  root["e"] = map(analogRead(ring_mcp), 380, 615, 1, 255); // ring_mcp
+  root["f"] = map(analogRead(ring_pip), 430, 614, 1, 255); // ring_pip
+  root["g"] = map(analogRead(pinky_mcp), 490, 650, 1, 255); // pinky_mcp
+  root["h"] = map(analogRead(pinky_pip), 450, 626, 1, 255); // pinky_pip
   root["i"] = thumb_mcp_val; // thumb_mcp
   root["j"] = thumb_pip_val; // thumb_pip
   root["k"] = thumb_hes_val; // thumb_hes
-  root["l"] = map(analogRead(index_hes), 0, 1023, 1, 255); // index_hes
-  root["m"] = map(analogRead(ring_hes), 0, 1023, 1, 255); // ring_hes
-  root["n"] = map(analogRead(pinky_hes), 0, 1023, 1, 255); // pinky_hes
+  val = map(analogRead(index_hes), 516, 905, 255, 1); 
+  if (val < 1) val = 1;
+  if (val > 255) val = 255;
+  root["l"] = val; // index_hes
+  val = map(analogRead(ring_hes), 533, 915, 255, 1);
+  if (val < 1) val = 1;
+  if (val > 255) val = 255;
+  root["m"] = val; // ring_hes
+  val = map(analogRead(pinky_hes), 518, 919, 255, 1);
+  if (val < 1) val = 1;
+  if (val > 255) val = 255;
+  root["n"] = val ; // pinky_hes
   root["o"] = x_acc_val; // x_acc
   root["p"] = y_acc_val; // y_acc
   root["q"] = z_acc_val; // z_acc
@@ -141,21 +151,21 @@ void loop(void) {
 //  Serial.print("\t ");
 //  Serial.print(middle_pip_val);
 //  Serial.print("\t ");
-//  Serial.print(map(analogRead(ring_mcp), 0, 1023, 8, 255));
+//  Serial.print(map(analogRead(ring_mcp), 350, 620, 1, 255));
 //  Serial.print("\t ");
-//  Serial.print(map(analogRead(ring_pip), 0, 1023, 8, 255));
+//  Serial.print(map(analogRead(ring_pip), 449, 614, 1, 255));
 //  Serial.print("\t ");
-//  Serial.print(map(analogRead(pinky_mcp), 0, 1023, 8, 255));
+//  Serial.print(map(analogRead(pinky_mcp), 490, 673, 1, 255));
 //  Serial.print("\t ");
-//  Serial.print(map(analogRead(pinky_pip), 0, 1023, 8, 255));
+//  Serial.print(map(analogRead(pinky_pip), 470, 626, 1, 255));
 //  Serial.print("\t ");
 //  Serial.print(thumb_hes_val);
 //  Serial.print("\t ");
-//  Serial.print(map(analogRead(index_hes), 0, 1023, 8, 255));
+//  Serial.print(map(analogRead(index_hes), 516, 905, 255, 1));
 //  Serial.print("\t ");
-//  Serial.print(map(analogRead(ring_hes), 0, 1023, 8, 255));
+//  Serial.print(map(analogRead(ring_hes), 533, 915, 255, 1));
 //  Serial.print("\t ");
-//  Serial.print(map(analogRead(pinky_hes), 0, 1023, 8, 255));
+//  Serial.print(map(analogRead(pinky_hes), 518, 919, 255, 1));
 //  Serial.print("\t ");
 //  Serial.print(x_acc_val);
 //  Serial.print("\t ");
@@ -170,7 +180,7 @@ void loop(void) {
 //  Serial.print(z_gyro_val);
 //  Serial.println("\t ");
 
-//  delay(500);
+//  delay(50);
 
   
   root.prettyPrintTo(Serial);
