@@ -42,7 +42,7 @@ NUM_DENSE_NODES = 50
 P_DROPOUT = 0.5
 
 # Training values
-NUM_EPOCHS = 25
+NUM_EPOCHS = 50
 
 # Feature names and Label column
 class colName(Enum):
@@ -101,9 +101,6 @@ labels = data_shuffled[colName.label.value]
 #print("Labels:\n" + str(labels))
 #print("Data: " + str(rows))
 
-#TODO scale data points on the domain [-1, 1] within the
-# output range of each respective sensor
-
 # Split data into train (80%) and test (20%) sets
 data_train, data_test, labels_train, labels_test = sklearn.model_selection.train_test_split(rows, labels, test_size=0.20)
 #print("Test data: " + str(data_test))
@@ -123,12 +120,10 @@ model.add(Dense(NUM_DENSE_NODES, activation='relu', name="dense1"))
 model.add(Dropout(P_DROPOUT, name="dropout1"))
 model.add(Dense(NUM_LABEL_ENUMS, activation='softmax', name="output1"))
 
-# TODO: Test categorical one-hots with different loss function
 model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 
 ### Train model
-# TODO: Experiment with different numbers of epochs for training
 #print('Data_train is ' + str(type(data_train)))
 #print('Data_train has ' + str(len(list(data_train))) + ' features and ' + str(len(data_train)) + ' rows.')
 
